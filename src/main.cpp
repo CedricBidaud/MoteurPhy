@@ -19,6 +19,9 @@
 #include "StickyForce.hpp"
 #include "BrakeForce.hpp"
 
+#include "imgui.h"
+#include "imguiRenderGL.h"
+
 //~ #include "utils.hpp"
 
 static const Uint32 WINDOW_WIDTH = 1024;
@@ -28,6 +31,7 @@ using namespace imac3;
 
 
 int main() {
+	
     WindowManager wm(WINDOW_WIDTH, WINDOW_HEIGHT, "Newton was a Geek");
     wm.setFramerate(30);
 
@@ -95,6 +99,47 @@ int main() {
 	bool open = false;
 
 	bool done = false;
+	
+	/*
+	 * 
+	 * IHM
+	 * 
+	 */
+	 
+	
+	
+	GLenum error;
+	if(GLEW_OK != (error = glewInit())) {
+			std::cerr << "Impossible d'initialiser GLEW: " << glewGetErrorString(error) << std::endl;
+			return EXIT_FAILURE;
+	}
+	
+	bool ihm = true;
+    
+    bool is_lClicPressed = false;
+    
+    int uiWidth = 300;
+	int uiHeight = 500;
+	int detailsUIHeight = 170;
+	int camUIHeight = 200;
+	int viewUIHeight = 250;
+	
+	int mousex = 0;
+	int mousey = 0;
+	int uiScrollTest = 0;
+	int detailsUIscrollArea = 0;
+	int camUIscrollArea = 0;
+	int viewUIscrollArea = 0;
+	int closeScrollArea = 0;
+	
+	int toggle = 0;
+	
+	if (!imguiRenderGLInit("DroidSans.ttf")){
+		fprintf(stderr, "Could not init GUI renderer.\n");
+		exit(EXIT_FAILURE);
+	}
+	
+	
     while(!done) {
         wm.startMainLoop();
 
@@ -159,6 +204,50 @@ int main() {
         //circle2PolyForce.apply(particleManager);
         
         leapfrog.solve(particleManager, dt);
+        
+        
+        // --- IMGUI ---
+        
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glDisable(GL_DEPTH_TEST);
+        
+        SDL_GetMouseState(&mousex, &mousey);
+        
+		mousey = WINDOW_HEIGHT - mousey;
+		imguiBeginFrame(mousex, mousey, is_lClicPressed, 0);        
+        
+        imguiBeginScrollArea("Test", WINDOW_WIDTH - uiWidth, WINDOW_HEIGHT - (uiHeight+10), uiWidth, uiHeight, &uiScrollTest);
+		imguiSeparatorLine();
+		imguiSeparator();
+		
+		imguiLabel("Test Scroller");
+		
+		imguiSlider("Repulsive K", &repulsiveForce.m_fK, 0.f, 5.f, 0.001f);
+		imguiSlider("Repulsive L", &repulsiveForce.m_fL, 0.f, 0.5f, 0.001f);
+		
+		imguiSeparatorLine();
+		
+		imguiSlider("Sticky K", &stickyForce.m_fK, 0.f, 5.f, 0.001f);
+		imguiSlider("Sticky LInf", &stickyForce.m_fLInf, 0.f, 0.5f, 0.001f);
+		imguiSlider("Sticky LSup", &stickyForce.m_fLSup, 0.f, 1.0f, 0.001f);
+		
+		imguiSeparator();
+		if(imguiButton("Time Pause (Spacebar)")){
+			std::cout << "BUTTON" << std::endl;
+		}
+		
+		imguiEndScrollArea();
+		imguiEndFrame();
+		
+		imguiRenderGLDraw(WINDOW_WIDTH, WINDOW_HEIGHT);
+		
+		
+		// Mise à jour de l'affichage
+        SDL_GL_SwapBuffers();
+                        
+		glDisable(GL_BLEND);
+		glEnable(GL_DEPTH_TEST);
 
         // Gestion des evenements
 		SDL_Event e;
@@ -166,6 +255,32 @@ int main() {
 			switch(e.type) {
 				default:
 					break;
+					
+				case SDL_MOUSEBUTTONDOWN:
+					switch(e.button.button){
+						case SDL_BUTTON_LEFT:
+							is_lClicPressed = true;
+							std::cout << "pushed : " << is_lClicPressed << std::endl;
+							break;
+							
+						default:
+							break;
+					}
+					break;
+												
+				case SDL_MOUSEBUTTONUP:
+					switch(e.button.button){
+						case SDL_BUTTON_LEFT:
+							is_lClicPressed = false;
+							std::cout << "released : " << is_lClicPressed << std::endl;
+							break;
+						
+						default:
+							break;
+					}
+					break;
+							
+					
 					
 				case SDL_KEYDOWN:
 					switch(e.key.keysym.sym){
@@ -216,10 +331,12 @@ int main() {
 					break;
 			}
 		}
-
         // Mise à jour de la fenêtre
         dt = wm.update();
 	}
+	
+	// imgui
+    imguiRenderGLDestroy();
 
 	return EXIT_SUCCESS;
 }

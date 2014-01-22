@@ -14,6 +14,9 @@ include_directories(third-party/glew-1.10.0/include)
 add_definitions(-DGLEW_STATIC=1)
 add_subdirectory(third-party/glew-1.10.0)
 
+# IMGUI :
+include_directories(third-party/my_imgui)
+
 # Enable C++11 on GCC 4.4+
 set(CMAKE_CXX_FLAGS "-std=c++0x")
 
