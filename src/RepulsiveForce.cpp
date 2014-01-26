@@ -4,9 +4,12 @@
 
 namespace imac3 {
 
-	RepulsiveForce::RepulsiveForce(float fK, float fL){
-		m_fK= fK;
-		m_fL= fL;
+	RepulsiveForce::RepulsiveForce(float fKRep, float fKSticky, float fLInf, float fLSup){
+		m_fKRep= fKRep;
+		m_fKSticky= fKSticky;
+		m_fLInf= fLInf;
+		m_fLSup= fLSup;
+		
 	}
 
 	void RepulsiveForce::apply(ParticleManager &pm) {
@@ -22,14 +25,30 @@ namespace imac3 {
 					
 					glm::vec2 vect = p2 - p1;
 					
-					float norm = sqrt(glm::dot(p2-p1,p2-p1));
+					float norm = glm::length(vect);
 					
 					glm::vec2 force = glm::vec2(0.0);
 					
-					if(norm < m_fL)
-						force = m_fK*(1-m_fL/glm::max(norm,0.0001f))*(p2-p1);
-						
+					// Répulsion
+					if(norm < m_fLInf - 0.04f){
+						force = m_fKRep*(1-(m_fLInf-0.04f)/glm::max(norm,0.0001f))*(vect);
+					}
+					//~ if(norm > m_fLSup && norm < m_fLSup + 0.05f){
+						//~ force = m_fKRep*(1-(m_fLSup + 0.05f)/glm::max(norm,0.0001f))*(vect);
+					//~ }
 					
+					// Sticky
+					if(norm > m_fLInf && norm < m_fLSup){
+						force = m_fKSticky*(1-m_fLInf/glm::max(norm,0.0001f))*(vect);
+					}
+					
+					// tests compression
+					//~ if(vect.y < 0.0f){
+						//~ force *= (2.0f-vect.y)*0.5f;
+					//~ }
+					//~ if(vect.y < 0.0f){
+						//~ force *= vect.y;
+					//~ }
 						
 					pm.addForce(i, force);
 				}

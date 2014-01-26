@@ -24,7 +24,7 @@ unsigned int ParticleManager::addParticle(glm::vec2 position, float mass, glm::v
 void ParticleManager::addRandomParticles(unsigned int count){
 	for (int i=0;i<count;++i){
 		glm::vec2 pos = glm::vec2(glm::linearRand(0.5f,0.5f),glm::linearRand(0.75f,0.75f));
-		addParticle(pos, glm::linearRand(1.0f,1.0f), glm::vec3(pos.x,pos.y,pos.x*pos.y), glm::vec2(glm::linearRand(-0.03,-0.06),glm::linearRand(0.07,0.13)));
+		addParticle(pos, glm::linearRand(1.0f,1.0f), glm::vec3(glm::linearRand(0.0,1.0),glm::linearRand(0.0,1.0),glm::linearRand(0.0,1.0)), glm::vec2(glm::linearRand(-0.03,-0.06),glm::linearRand(0.07,0.13)));
 	}
 }
 

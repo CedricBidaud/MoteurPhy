@@ -23,12 +23,12 @@ namespace imac3 {
 					
 					glm::vec2 vect = p2 - p1;
 					
-					float norm = sqrt(glm::dot(p2-p1,p2-p1));
+					float norm = glm::length(vect);
 					
 					glm::vec2 force = glm::vec2(0.0);
 					
 					if(norm > m_fLInf && norm < m_fLSup)
-						force = m_fK*(1-m_fLInf/glm::max(norm,0.0001f))*(p2-p1);
+						force = m_fK*(1-m_fLInf/glm::max(norm,0.0001f))*(vect);
 						
 					
 						

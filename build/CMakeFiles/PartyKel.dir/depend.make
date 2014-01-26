@@ -72,6 +72,7 @@ CMakeFiles/PartyKel.dir/src/BrakeForce.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc
 CMakeFiles/PartyKel.dir/src/BrakeForce.cpp.o: ../src/BrakeForce.cpp
 CMakeFiles/PartyKel.dir/src/BrakeForce.cpp.o: ../src/BrakeForce.hpp
 CMakeFiles/PartyKel.dir/src/BrakeForce.cpp.o: ../src/Force.hpp
+CMakeFiles/PartyKel.dir/src/BrakeForce.cpp.o: ../src/Leapfrog.hpp
 CMakeFiles/PartyKel.dir/src/BrakeForce.cpp.o: ../src/ParticleManager.hpp
 CMakeFiles/PartyKel.dir/src/BrakeForce.cpp.o: ../src/renderer/ParticleRenderer2D.hpp
 

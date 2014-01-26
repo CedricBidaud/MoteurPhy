@@ -47,23 +47,24 @@ int main() {
     particleManager.addParticle(glm::vec2(0.3f, 0.0f), 1, glm::vec3(0, 1, 1), glm::vec2(0.f));
     particleManager.addParticle(glm::vec2(0.2f, 0.4f), 1, glm::vec3(1, 1, 0), glm::vec2(0.f));
 */
+
+	Leapfrog leapfrog;
+
 	ConstantForce constForce(glm::vec2(0.000f,-0.03f));
 
     // hookForce(K,L)
     float L = 0.05f;
     HookForce hookForce(0.2f, 0.15f);
     //~ RepulsiveForce repulsiveForce(1.0f, L);
-    RepulsiveForce repulsiveForce(0.1f, L);
+    RepulsiveForce repulsiveForce(0.1f, 0.2f, L, L+0.05);
     
     //~ StickyForce(float fK, float fLInf, float fLSup);
-    StickyForce stickyForce(0.4, L - 0.02, L+0.02);
+    //~ StickyForce stickyForce(0.4, L - 0.02, L+0.02);
 
     // brakeForce(dt,V,L)
-    BrakeForce brakeForce(0.0f, 0.05f, L);
+    BrakeForce brakeForce(0.0f, 0.05f, L, leapfrog);
 	
 	//particleManager.printForces();
-
-    Leapfrog leapfrog;
     
     // Polygon Polygon::buildBox(glm::vec3 color, glm::vec2 position, float width, float height, bool isInner)
     Polygon box = Polygon::buildBox(glm::vec3(0.5,0.3,0.3), glm::vec2(0.f,0.f), 1.8f, 1.8f, true);
@@ -134,6 +135,12 @@ int main() {
 	
 	int toggle = 0;
 	
+	bool repulsiveIHM = true;
+	//~ bool stickyIHM = true;
+	bool brakeIHM = true;
+	bool link = false;
+	
+	
 	if (!imguiRenderGLInit("DroidSans.ttf")){
 		fprintf(stderr, "Could not init GUI renderer.\n");
 		exit(EXIT_FAILURE);
@@ -149,7 +156,7 @@ int main() {
         // ---- test ----
         if(open){
 			//~ particleManager.addRandomParticles(100);
-			particleManager.addRandomParticles(1);
+			particleManager.addRandomParticles(2);
 			//~ particleManager.addParticle(glm::vec2(0, 0.5), 1, glm::vec3(100/(i+1), i, i), glm::vec2(glm::linearRand(-0.1,0.1),glm::linearRand(-0.1,0.1)));
 			
 			//~ std::cout << "i : " << i << std::endl;
@@ -173,7 +180,7 @@ int main() {
         constForce.apply(particleManager);
 
         repulsiveForce.apply(particleManager);
-        stickyForce.apply(particleManager);
+        //~ stickyForce.apply(particleManager);
         //~ hookForce.apply(particleManager);
 
         brakeForce.setDt(dt);
@@ -217,24 +224,94 @@ int main() {
 		mousey = WINDOW_HEIGHT - mousey;
 		imguiBeginFrame(mousex, mousey, is_lClicPressed, 0);        
         
-        imguiBeginScrollArea("Test", WINDOW_WIDTH - uiWidth, WINDOW_HEIGHT - (uiHeight+10), uiWidth, uiHeight, &uiScrollTest);
+        imguiBeginScrollArea("Forces", WINDOW_WIDTH - uiWidth, WINDOW_HEIGHT - (uiHeight+10), uiWidth, uiHeight, &uiScrollTest);
 		imguiSeparatorLine();
 		imguiSeparator();
 		
-		imguiLabel("Test Scroller");
+		if(imguiButton("Afficher Interface")){
+			ihm = !ihm;
+		}
 		
-		imguiSlider("Repulsive K", &repulsiveForce.m_fK, 0.f, 5.f, 0.001f);
-		imguiSlider("Repulsive L", &repulsiveForce.m_fL, 0.f, 0.5f, 0.001f);
+		if(ihm == true) {
+			char lineBuffer[512];
+			sprintf(lineBuffer, "Nb Particules %d", particleManager.getSize());
+			imguiLabel(lineBuffer);
+			imguiSeparator();
+			
+			if(imguiItem("Repulsive Force", repulsiveIHM)){
+				repulsiveIHM = false;
+				//~ stickyIHM = true;
+				brakeIHM = true;
+			}
+			
+			//~ if(imguiItem("Sticky Force", stickyIHM)){
+				//~ stickyIHM = false;
+				//~ repulsiveIHM = true;
+				//~ brakeIHM = true;
+			//~ }
+			
+			if(imguiItem("Brake Force", brakeIHM)){
+				brakeIHM = false;
+				repulsiveIHM = true;
+				//~ stickyIHM = true;
+				//~ std::cout << "test brake item" << std::endl;
+			}
+			
+			//~ imguiLabel("Test Scroller");
+			
+			imguiSeparatorLine();
+			
+			
 		
-		imguiSeparatorLine();
-		
-		imguiSlider("Sticky K", &stickyForce.m_fK, 0.f, 5.f, 0.001f);
-		imguiSlider("Sticky LInf", &stickyForce.m_fLInf, 0.f, 0.5f, 0.001f);
-		imguiSlider("Sticky LSup", &stickyForce.m_fLSup, 0.f, 1.0f, 0.001f);
-		
-		imguiSeparator();
-		if(imguiButton("Time Pause (Spacebar)")){
-			std::cout << "BUTTON" << std::endl;
+			if(repulsiveIHM == false){
+				imguiLabel("Repulsive Force");
+				
+				
+				if(imguiCheck("Lier les bornes", link, true)){
+					link = !link;
+				}
+				
+				float actualInf = repulsiveForce.m_fLInf;
+				float actualSup = repulsiveForce.m_fLSup;
+				
+				imguiSlider("Repulsive KRep", &repulsiveForce.m_fKRep, 0.f, 2.f, 0.001f);
+				imguiSlider("Repulsive KSticky", &repulsiveForce.m_fKSticky, 0.f, 2.f, 0.001f);
+				imguiSlider("Repulsive LInf", &repulsiveForce.m_fLInf, 0.f, 0.5f, 0.001f);
+				imguiSlider("Repulsive LSup", &repulsiveForce.m_fLSup, 0.f, 0.5f, 0.001f);
+				
+				float dInf = repulsiveForce.m_fLInf - actualInf;
+				float dSup = repulsiveForce.m_fLSup - actualSup;
+				
+				if(link == true){
+					repulsiveForce.m_fLInf += dSup;
+					repulsiveForce.m_fLSup += dInf;
+				}
+				
+				
+			}
+			
+			
+			//~ if(stickyIHM == false){
+				//~ imguiLabel("Sticky Force");
+				//~ 
+				//~ imguiSlider("Sticky K", &stickyForce.m_fK, 0.f, 5.f, 0.001f);
+				//~ imguiSlider("Sticky LInf", &stickyForce.m_fLInf, 0.f, 0.5f, 0.001f);
+				//~ imguiSlider("Sticky LSup", &stickyForce.m_fLSup, 0.f, 1.0f, 0.001f);
+			//~ }
+			
+			if(brakeIHM == false){
+				imguiLabel("Brake Force");
+				
+				imguiSlider("Brake V", &brakeForce.m_fV, 0.f, 1.f, 0.001f);
+				imguiSlider("Brake L", &brakeForce.m_fL, 0.f, 0.8f, 0.001f);
+				imguiSlider("Brake Amort", &brakeForce.m_fAmort, 0.0f, 0.01f, 0.0001f);
+			}
+			
+			imguiSeparator();
+			if(imguiButton("Ouvrir / Fermer la vanne")){
+				open = !open;
+			}
+			
 		}
 		
 		imguiEndScrollArea();
@@ -260,7 +337,7 @@ int main() {
 					switch(e.button.button){
 						case SDL_BUTTON_LEFT:
 							is_lClicPressed = true;
-							std::cout << "pushed : " << is_lClicPressed << std::endl;
+							//~ std::cout << "pushed : " << is_lClicPressed << std::endl;
 							break;
 							
 						default:
@@ -272,7 +349,7 @@ int main() {
 					switch(e.button.button){
 						case SDL_BUTTON_LEFT:
 							is_lClicPressed = false;
-							std::cout << "released : " << is_lClicPressed << std::endl;
+							//~ std::cout << "released : " << is_lClicPressed << std::endl;
 							break;
 						
 						default:
@@ -293,35 +370,35 @@ int main() {
 							open = !open;
 							break;
 							
-						case SDLK_r:
-							repulsiveForce.m_fK += pas;
-							std::cout << "rep K : " << repulsiveForce.m_fK << " - rep L : " << repulsiveForce.m_fL << std::endl;
-							break;
+						//~ case SDLK_r:
+							//~ repulsiveForce.m_fK += pas;
+							//~ std::cout << "rep K : " << repulsiveForce.m_fK << " - rep L : " << repulsiveForce.m_fL << std::endl;
+							//~ break;
+							//~ 
+						//~ case SDLK_t:
+							//~ repulsiveForce.m_fL += pas;
+							//~ stickyForce.m_fLSup += pas;
+							//~ stickyForce.m_fLInf += pas;
+							//~ std::cout << "rep K : " << repulsiveForce.m_fK << " - rep L : " << repulsiveForce.m_fL << std::endl;
+							//~ break;
+							//~ 
+						//~ case SDLK_b:
+							//~ brakeForce.m_fV += pas;
+							//~ std::cout << "brake K : " << brakeForce.m_fV << " - brake L : " << brakeForce.m_fL << std::endl;
+							//~ break;
+							//~ 
+						//~ case SDLK_n:
+							//~ brakeForce.m_fL += pas;
+							//~ std::cout << "brake K : " << brakeForce.m_fV << " - brake L : " << brakeForce.m_fL << std::endl;
+							//~ break;
 							
-						case SDLK_t:
-							repulsiveForce.m_fL += pas;
-							stickyForce.m_fLSup += pas;
-							stickyForce.m_fLInf += pas;
-							std::cout << "rep K : " << repulsiveForce.m_fK << " - rep L : " << repulsiveForce.m_fL << std::endl;
-							break;
-							
-						case SDLK_b:
-							brakeForce.m_fV += pas;
-							std::cout << "brake K : " << brakeForce.m_fV << " - brake L : " << brakeForce.m_fL << std::endl;
-							break;
-							
-						case SDLK_n:
-							brakeForce.m_fL += pas;
-							std::cout << "brake K : " << brakeForce.m_fV << " - brake L : " << brakeForce.m_fL << std::endl;
-							break;
-							
-						case SDLK_p:
-							pas *= 2.0;
-							break;
-							
-						case SDLK_i:
-							pas *= -1.0;
-							break;
+						//~ case SDLK_p:
+							//~ pas *= 2.0;
+							//~ break;
+							//~ 
+						//~ case SDLK_i:
+							//~ pas *= -1.0;
+							//~ break;
 					}
 					break;
 					

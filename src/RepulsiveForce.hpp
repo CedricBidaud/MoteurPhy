@@ -11,12 +11,14 @@ namespace imac3 {
 class RepulsiveForce : Force {
 
 	public:
-		RepulsiveForce(float fK, float fL);
+		RepulsiveForce(float fKRep, float fKSticky, float fLInf, float fLSup);
 		void apply(ParticleManager &pm);
 	
 	public: // getter setter à faire
-		float m_fK;
-		float m_fL;
+		float m_fKRep;
+		float m_fKSticky;
+		float m_fLInf;
+		float m_fLSup;
 
 };
 
