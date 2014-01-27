@@ -1,4 +1,4 @@
-# Install script for directory: /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy
+# Install script for directory: /home/tom/Documents/MoteurPhy
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,7 +34,7 @@ ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("/home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/third-party/glew-1.10.0/cmake_install.cmake")
+  INCLUDE("/home/tom/Documents/MoteurPhy/build/third-party/glew-1.10.0/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 
@@ -44,7 +44,7 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
-FILE(WRITE "/home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/${CMAKE_INSTALL_MANIFEST}" "")
+FILE(WRITE "/home/tom/Documents/MoteurPhy/build/${CMAKE_INSTALL_MANIFEST}" "")
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  FILE(APPEND "/home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  FILE(APPEND "/home/tom/Documents/MoteurPhy/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 ENDFOREACH(file)
