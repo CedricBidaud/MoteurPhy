@@ -118,6 +118,7 @@ int main() {
 	}
 	
 	bool ihm = true;
+	bool ihmForTom = false;
     
     bool is_lClicPressed = false;
     
@@ -217,121 +218,124 @@ int main() {
         
         // --- IMGUI ---
         
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glDisable(GL_DEPTH_TEST);
-        
-        SDL_GetMouseState(&mousex, &mousey);
-        
-		mousey = WINDOW_HEIGHT - mousey;
-		imguiBeginFrame(mousex, mousey, is_lClicPressed, 0);        
-        
-        imguiBeginScrollArea("Forces", WINDOW_WIDTH - uiWidth, WINDOW_HEIGHT - (uiHeight+10), uiWidth, uiHeight, &uiScrollTest);
-		imguiSeparatorLine();
-		
-		if(imguiButton("Afficher Interface")){
-			ihm = !ihm;
-		}
-		
-		if(ihm == true) {
-			char lineBuffer[512];
-			sprintf(lineBuffer, "Nb Particules %d", particleManager.getSize());
-			imguiLabel(lineBuffer);
-			imguiSeparator();
+        if (ihmForTom==true){
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glDisable(GL_DEPTH_TEST);
 			
-			if(imguiItem("Repulsive Force", repulsiveIHM)){
-				repulsiveIHM = false;
-				//~ stickyIHM = true;
-				brakeIHM = true;
-			}
+			SDL_GetMouseState(&mousex, &mousey);
 			
-			//~ if(imguiItem("Sticky Force", stickyIHM)){
-				//~ stickyIHM = false;
-				//~ repulsiveIHM = true;
-				//~ brakeIHM = true;
-			//~ }
+			mousey = WINDOW_HEIGHT - mousey;
+			imguiBeginFrame(mousex, mousey, is_lClicPressed, 0);        
 			
-			if(imguiItem("Brake Force", brakeIHM)){
-				brakeIHM = false;
-				repulsiveIHM = true;
-				//~ stickyIHM = true;
-				//~ std::cout << "test brake item" << std::endl;
-			}
-			
-			//~ imguiLabel("Test Scroller");
-			
+			imguiBeginScrollArea("Forces", WINDOW_WIDTH - uiWidth, WINDOW_HEIGHT - (uiHeight+10), uiWidth, uiHeight, &uiScrollTest);
 			imguiSeparatorLine();
+			imguiSeparator();
 			
+			if(imguiButton("Afficher Interface")){
+				ihm = !ihm;
+			}
 			
-		
-			if(repulsiveIHM == false){
-				imguiLabel("Repulsive Force");
+			if(ihm == true) {
+				char lineBuffer[512];
+				sprintf(lineBuffer, "Nb Particules %d", particleManager.getSize());
+				imguiLabel(lineBuffer);
+				imguiSeparator();
 				
-				
-				if(imguiCheck("Lier les bornes", link, true)){
-					link = !link;
+				if(imguiItem("Repulsive Force", repulsiveIHM)){
+					repulsiveIHM = false;
+					//~ stickyIHM = true;
+					brakeIHM = true;
 				}
 				
-				float actualInf = repulsiveForce.m_fLInf;
-				float actualSup = repulsiveForce.m_fLSup;
+				//~ if(imguiItem("Sticky Force", stickyIHM)){
+					//~ stickyIHM = false;
+					//~ repulsiveIHM = true;
+					//~ brakeIHM = true;
+				//~ }
 				
-				imguiSlider("Repulsive KRep", &repulsiveForce.m_fKRep, 0.f, 2.f, 0.001f);
-				imguiSlider("Repulsive KSticky", &repulsiveForce.m_fKSticky, 0.f, 2.f, 0.001f);
-				imguiSlider("Repulsive LInf", &repulsiveForce.m_fLInf, 0.f, 0.5f, 0.001f);
-				imguiSlider("Repulsive LSup", &repulsiveForce.m_fLSup, 0.f, 0.5f, 0.001f);
+				if(imguiItem("Brake Force", brakeIHM)){
+					brakeIHM = false;
+					repulsiveIHM = true;
+					//~ stickyIHM = true;
+					//~ std::cout << "test brake item" << std::endl;
+				}
 				
-				float dInf = repulsiveForce.m_fLInf - actualInf;
-				float dSup = repulsiveForce.m_fLSup - actualSup;
+				//~ imguiLabel("Test Scroller");
 				
-				if(link == true){
-					repulsiveForce.m_fLInf += dSup;
-					repulsiveForce.m_fLSup += dInf;
+				imguiSeparatorLine();
+				
+				
+			
+				if(repulsiveIHM == false){
+					imguiLabel("Repulsive Force");
+					
+					
+					if(imguiCheck("Lier les bornes", link, true)){
+						link = !link;
+					}
+					
+					float actualInf = repulsiveForce.m_fLInf;
+					float actualSup = repulsiveForce.m_fLSup;
+					
+					imguiSlider("Repulsive KRep", &repulsiveForce.m_fKRep, 0.f, 2.f, 0.001f);
+					imguiSlider("Repulsive KSticky", &repulsiveForce.m_fKSticky, 0.f, 2.f, 0.001f);
+					imguiSlider("Repulsive LInf", &repulsiveForce.m_fLInf, 0.f, 0.5f, 0.001f);
+					imguiSlider("Repulsive LSup", &repulsiveForce.m_fLSup, 0.f, 0.5f, 0.001f);
+					
+					float dInf = repulsiveForce.m_fLInf - actualInf;
+					float dSup = repulsiveForce.m_fLSup - actualSup;
+					
+					if(link == true){
+						repulsiveForce.m_fLInf += dSup;
+						repulsiveForce.m_fLSup += dInf;
+					}
+					
+					
 				}
 				
 				
-			}
-			
-			
-			//~ if(stickyIHM == false){
-				//~ imguiLabel("Sticky Force");
-				//~ 
-				//~ imguiSlider("Sticky K", &stickyForce.m_fK, 0.f, 5.f, 0.001f);
-				//~ imguiSlider("Sticky LInf", &stickyForce.m_fLInf, 0.f, 0.5f, 0.001f);
-				//~ imguiSlider("Sticky LSup", &stickyForce.m_fLSup, 0.f, 1.0f, 0.001f);
-			//~ }
-			
-			if(brakeIHM == false){
-				imguiLabel("Brake Force");
+				//~ if(stickyIHM == false){
+					//~ imguiLabel("Sticky Force");
+					//~ 
+					//~ imguiSlider("Sticky K", &stickyForce.m_fK, 0.f, 5.f, 0.001f);
+					//~ imguiSlider("Sticky LInf", &stickyForce.m_fLInf, 0.f, 0.5f, 0.001f);
+					//~ imguiSlider("Sticky LSup", &stickyForce.m_fLSup, 0.f, 1.0f, 0.001f);
+				//~ }
 				
-				imguiSlider("Brake V", &brakeForce.m_fV, 0.f, 1.f, 0.001f);
-				imguiSlider("Brake L", &brakeForce.m_fL, 0.f, 0.8f, 0.001f);
-				imguiSlider("Brake Amort", &brakeForce.m_fAmort, 0.0f, 0.01f, 0.0001f);
+				if(brakeIHM == false){
+					imguiLabel("Brake Force");
+					
+					imguiSlider("Brake V", &brakeForce.m_fV, 0.f, 1.f, 0.001f);
+					imguiSlider("Brake L", &brakeForce.m_fL, 0.f, 0.8f, 0.001f);
+					imguiSlider("Brake Amort", &brakeForce.m_fAmort, 0.0f, 0.01f, 0.0001f);
+				}
+				
+				imguiSeparator();
+				if(imguiButton("Ouvrir / Fermer la vanne (Spacebar)")){
+					open = !open;
+				}
+				
+				imguiSeparator();
+				if(imguiButton("Reset ('c')")){
+					particleManager.clean();
+				}
+				
 			}
 			
-			imguiSeparator();
-			if(imguiButton("Ouvrir / Fermer la vanne (Spacebar)")){
-				open = !open;
-			}
+			imguiEndScrollArea();
+			imguiEndFrame();
 			
-			imguiSeparator();
-			if(imguiButton("Reset ('c')")){
-				particleManager.clean();
-			}
+			imguiRenderGLDraw(WINDOW_WIDTH, WINDOW_HEIGHT);
 			
+			// Mise à jour de l'affichage
+			SDL_GL_SwapBuffers();
+							
+			glDisable(GL_BLEND);
+			glEnable(GL_DEPTH_TEST);
+
 		}
 		
-		imguiEndScrollArea();
-		imguiEndFrame();
-		
-		imguiRenderGLDraw(WINDOW_WIDTH, WINDOW_HEIGHT);
-		
-		
-		// Mise à jour de l'affichage
-        SDL_GL_SwapBuffers();
-                        
-		glDisable(GL_BLEND);
-		glEnable(GL_DEPTH_TEST);
-
         // Gestion des evenements
 		SDL_Event e;
         while(wm.pollEvent(e)) {
