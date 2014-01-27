@@ -29,6 +29,8 @@ class ParticleManager{
 		void setParticleVelocity(unsigned int i, glm::vec2 velocity);
 		void setParticleForce(unsigned int i, glm::vec2 force);
 		void resetParticleForce(unsigned int i);
+		
+		void clean();
 
 		void printForces();
 		

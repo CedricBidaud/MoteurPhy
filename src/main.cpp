@@ -55,14 +55,14 @@ int main() {
     // hookForce(K,L)
     float L = 0.05f;
     HookForce hookForce(0.2f, 0.15f);
-    //~ RepulsiveForce repulsiveForce(1.0f, L);
-    RepulsiveForce repulsiveForce(0.1f, 0.2f, L, L+0.05);
+    //~ RepulsiveForce(float fKRep, float fKSticky, float fLInf, float fLSup);
+    RepulsiveForce repulsiveForce(0.258f, 0.290f, 0.115, 0.135);
     
     //~ StickyForce(float fK, float fLInf, float fLSup);
     //~ StickyForce stickyForce(0.4, L - 0.02, L+0.02);
 
-    // brakeForce(dt,V,L)
-    BrakeForce brakeForce(0.0f, 0.05f, L, leapfrog);
+    //~ BrakeForce(float dt, float v, float l, const Leapfrog& solver);
+    BrakeForce brakeForce(0.0f, 0.050, 0.035, leapfrog);
 	
 	//particleManager.printForces();
     
@@ -77,14 +77,16 @@ int main() {
     
     //Polygon circle = Polygon::buildCircle(glm::vec3(0.2,0.7,0.2), glm::vec2(0.4f,0.1f), 0.2f, 32, false);
     //Polygon circle2 = Polygon::buildCircle(glm::vec3(0.2,0.5,0.9), glm::vec2(-0.2f,0.35f), 0.15f, 32, false);
-
-	PolygonForce boxPolyForce(box, 1.1, leapfrog);
-	PolygonForce box2PolyForce(box2, 1.1f, leapfrog);
 	
-	PolygonForce boxLPolyForce(boxL, 1.1f, leapfrog);
-	PolygonForce boxRPolyForce(boxR, 1.1f, leapfrog);
-	PolygonForce boxTPolyForce(boxT, 1.1f, leapfrog);
-	PolygonForce boxBPolyForce(boxB, 1.1f, leapfrog);
+	float polyStickyCoef = 1.0f;
+	
+	PolygonForce boxPolyForce(box, polyStickyCoef, leapfrog);
+	PolygonForce box2PolyForce(box2, polyStickyCoef, leapfrog);
+	
+	PolygonForce boxLPolyForce(boxL, polyStickyCoef, leapfrog);
+	PolygonForce boxRPolyForce(boxR, polyStickyCoef, leapfrog);
+	PolygonForce boxTPolyForce(boxT, polyStickyCoef, leapfrog);
+	PolygonForce boxBPolyForce(boxB, polyStickyCoef, leapfrog);
 	
 	//PolygonForce circlePolyForce(circle, 2.f, leapfrog);
 	//PolygonForce circle2PolyForce(circle2, 2.0f, leapfrog);
@@ -226,7 +228,6 @@ int main() {
         
         imguiBeginScrollArea("Forces", WINDOW_WIDTH - uiWidth, WINDOW_HEIGHT - (uiHeight+10), uiWidth, uiHeight, &uiScrollTest);
 		imguiSeparatorLine();
-		imguiSeparator();
 		
 		if(imguiButton("Afficher Interface")){
 			ihm = !ihm;
@@ -308,8 +309,13 @@ int main() {
 			}
 			
 			imguiSeparator();
-			if(imguiButton("Ouvrir / Fermer la vanne")){
+			if(imguiButton("Ouvrir / Fermer la vanne (Spacebar)")){
 				open = !open;
+			}
+			
+			imguiSeparator();
+			if(imguiButton("Reset ('c')")){
+				particleManager.clean();
 			}
 			
 		}
@@ -368,6 +374,10 @@ int main() {
 						case SDLK_SPACE:
 							//~ particleManager.addRandomParticles(100);
 							open = !open;
+							break;
+							
+						case SDLK_c:
+							particleManager.clean();
 							break;
 							
 						//~ case SDLK_r:

@@ -86,4 +86,12 @@ void ParticleManager::resetParticleForce(unsigned int i){
 	//~ std::cout << "After : " << m_forceArray[i].x << ", " << m_forceArray[i].y << std::endl;
 }
 
+void ParticleManager::clean(){
+	m_positionArray.clear();
+	m_massArray.clear();
+	m_colorArray.clear();
+	m_velocityArray.clear();
+	m_forceArray.clear();
+}
+
 } // end namespace imac3
