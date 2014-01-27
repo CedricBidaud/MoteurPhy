@@ -56,13 +56,13 @@ int main() {
     float L = 0.05f;
     HookForce hookForce(0.2f, 0.15f);
     //~ RepulsiveForce(float fKRep, float fKSticky, float fLInf, float fLSup);
-    RepulsiveForce repulsiveForce(0.258f, 0.290f, 0.115, 0.135);
+    RepulsiveForce repulsiveForce(0.191f, 0.282f, 0.145, 0.159);
     
     //~ StickyForce(float fK, float fLInf, float fLSup);
     //~ StickyForce stickyForce(0.4, L - 0.02, L+0.02);
 
     //~ BrakeForce(float dt, float v, float l, const Leapfrog& solver);
-    BrakeForce brakeForce(0.0f, 0.050, 0.035, leapfrog);
+    BrakeForce brakeForce(0.0f, 0.011, 0.159, leapfrog);
 	
 	//particleManager.printForces();
     
@@ -78,7 +78,7 @@ int main() {
     //Polygon circle = Polygon::buildCircle(glm::vec3(0.2,0.7,0.2), glm::vec2(0.4f,0.1f), 0.2f, 32, false);
     //Polygon circle2 = Polygon::buildCircle(glm::vec3(0.2,0.5,0.9), glm::vec2(-0.2f,0.35f), 0.15f, 32, false);
 	
-	float polyStickyCoef = 1.0f;
+	float polyStickyCoef = 1.005f;
 	
 	PolygonForce boxPolyForce(box, polyStickyCoef, leapfrog);
 	PolygonForce box2PolyForce(box2, polyStickyCoef, leapfrog);
@@ -118,7 +118,7 @@ int main() {
 	}
 	
 	bool ihm = true;
-	bool ihmForTom = false;
+	bool ihmForTom = true;
     
     bool is_lClicPressed = false;
     
@@ -159,7 +159,7 @@ int main() {
         // ---- test ----
         if(open){
 			//~ particleManager.addRandomParticles(100);
-			particleManager.addRandomParticles(2);
+			particleManager.addRandomParticles(1);
 			//~ particleManager.addParticle(glm::vec2(0, 0.5), 1, glm::vec3(100/(i+1), i, i), glm::vec2(glm::linearRand(-0.1,0.1),glm::linearRand(-0.1,0.1)));
 			
 			//~ std::cout << "i : " << i << std::endl;
@@ -248,12 +248,6 @@ int main() {
 					brakeIHM = true;
 				}
 				
-				//~ if(imguiItem("Sticky Force", stickyIHM)){
-					//~ stickyIHM = false;
-					//~ repulsiveIHM = true;
-					//~ brakeIHM = true;
-				//~ }
-				
 				if(imguiItem("Brake Force", brakeIHM)){
 					brakeIHM = false;
 					repulsiveIHM = true;
@@ -293,15 +287,6 @@ int main() {
 					
 					
 				}
-				
-				
-				//~ if(stickyIHM == false){
-					//~ imguiLabel("Sticky Force");
-					//~ 
-					//~ imguiSlider("Sticky K", &stickyForce.m_fK, 0.f, 5.f, 0.001f);
-					//~ imguiSlider("Sticky LInf", &stickyForce.m_fLInf, 0.f, 0.5f, 0.001f);
-					//~ imguiSlider("Sticky LSup", &stickyForce.m_fLSup, 0.f, 1.0f, 0.001f);
-				//~ }
 				
 				if(brakeIHM == false){
 					imguiLabel("Brake Force");

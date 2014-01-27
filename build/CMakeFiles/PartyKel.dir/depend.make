@@ -263,6 +263,7 @@ CMakeFiles/PartyKel.dir/src/imguiRenderGL.cpp.o: ../third-party/my_imgui/imgui.h
 CMakeFiles/PartyKel.dir/src/imguiRenderGL.cpp.o: ../third-party/my_imgui/stb_truetype.h
 CMakeFiles/PartyKel.dir/src/imguiRenderGL.cpp.o: ../src/imguiRenderGL.cpp
 
+CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glew-1.10.0/include/GL/glew.h
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glm-0.9.4.6/glm/./core/_detail.hpp
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glm-0.9.4.6/glm/./core/_fixes.hpp
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glm-0.9.4.6/glm/./core/_swizzle.hpp
@@ -332,7 +333,6 @@ CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/rando
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/random.inl
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/my_imgui/imgui.h
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/my_imgui/imguiRenderGL.h
-CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/my_imgui/stb_truetype.h
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../src/BrakeForce.hpp
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../src/ConstantForce.hpp
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../src/Force.hpp
