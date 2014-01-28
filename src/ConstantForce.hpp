@@ -13,8 +13,6 @@ class ConstantForce : Force {
 	public:
 		ConstantForce(glm::vec2 force);
 		void apply(ParticleManager &pm);
-	
-	private:
 		glm::vec2 m_force;
 
 };

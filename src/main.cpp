@@ -1,5 +1,7 @@
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
+#include <sstream> 
 
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
@@ -109,7 +111,7 @@ int main() {
 	 * 
 	 */
 	 
-	
+	 
 	
 	GLenum error;
 	if(GLEW_OK != (error = glewInit())) {
@@ -321,6 +323,9 @@ int main() {
 
 		}
 		
+		// Sauvegarde de la config
+		std::fstream config;
+		
         // Gestion des evenements
 		SDL_Event e;
         while(wm.pollEvent(e)) {
@@ -367,6 +372,66 @@ int main() {
 							
 						case SDLK_c:
 							particleManager.clean();
+							break;
+							
+						case SDLK_s:
+							if (!config.is_open())
+							{
+								config.open ("config.txt", std::fstream::in | std::fstream::out | std::fstream::trunc);
+								if (config.is_open())
+								{
+									config << constForce.m_force.y << "\n";
+									config << repulsiveForce.m_fKRep << "\n";
+									config << repulsiveForce.m_fKSticky << "\n";
+									config << repulsiveForce.m_fLInf << "\n";
+									config << repulsiveForce.m_fLSup << "\n";
+									config << brakeForce.m_fV << "\n";
+									config << brakeForce.m_fL << "\n";
+									config << brakeForce.m_fAmort << "\n";
+									//config.flush();
+									std::cout << "Config written \n";
+								} else {
+									std::cout << "Unable to open config \n";
+								}
+								config.close();
+							}
+							break;
+							
+						case SDLK_l:
+							std::string value;
+							float f;
+							config.open ("config.txt");
+							if (config.is_open())
+							{
+								std::cout << "Config is open \n";
+								getline (config,value);		
+								std::istringstream(value) >> f; 
+								constForce.m_force.y = f;
+								getline (config,value);		
+								std::istringstream(value) >> f; 
+								repulsiveForce.m_fKRep = f;
+								getline (config,value);
+								std::istringstream(value) >> f; 
+								repulsiveForce.m_fKSticky = f;
+								getline (config,value);
+								std::istringstream(value) >> f; 
+								repulsiveForce.m_fLInf = f;
+								getline (config,value);
+								std::istringstream(value) >> f; 
+								repulsiveForce.m_fLSup = f;
+								getline (config,value);
+								std::istringstream(value) >> f; 
+								brakeForce.m_fV = f;
+								getline (config,value);
+								std::istringstream(value) >> f; 
+								brakeForce.m_fL = f;
+								getline (config,value);
+								std::istringstream(value) >> f; 
+								brakeForce.m_fAmort = f;
+								std::cout << "Config loaded \n";
+								config.close();
+							}
+							else std::cout << "Unable to open config \n";
 							break;
 							
 						//~ case SDLK_r:
