@@ -31,13 +31,65 @@ static const Uint32 WINDOW_HEIGHT = 1024;
 
 using namespace imac3;
 
+struct ShaderGLSL
+{
+    enum ShaderType
+    {
+        VERTEX_SHADER = 1,
+        FRAGMENT_SHADER = 2,
+        GEOMETRY_SHADER = 4
+    };
+    GLuint program;
+};
+
+int compile_and_link_shader(ShaderGLSL & shader, int typeMask, const char * sourceBuffer, int bufferSize);
+int load_shader_from_file(ShaderGLSL & shader, const char * path, int typemask);
+int destroy_shader(ShaderGLSL & shader);
 
 int main() {
 	
     WindowManager wm(WINDOW_WIDTH, WINDOW_HEIGHT, "Newton was a Geek");
     wm.setFramerate(30);
 
-    ParticleRenderer2D renderer;
+	// ----
+	// SHADERS
+	// ----
+	
+	// Try to load and compile shader
+    ShaderGLSL particleShader;
+    const char * shaderFile = "../src/shaders/particle.glsl";
+    //~ int status = load_shader_from_file(shader, shaderFile, ShaderGLSL::VERTEX_SHADER | ShaderGLSL::FRAGMENT_SHADER | ShaderGLSL::GEOMETRY_SHADER);
+    int status = load_shader_from_file(particleShader, shaderFile, ShaderGLSL::VERTEX_SHADER | ShaderGLSL::FRAGMENT_SHADER);
+    if ( status == -1 )
+    {
+        fprintf(stderr, "Error on loading  %s\n", shaderFile);
+        exit( EXIT_FAILURE );
+    }
+
+   
+	ShaderGLSL polyShader;
+    shaderFile = "../src/shaders/poly.glsl";
+    //~ int status = load_shader_from_file(shader, shaderFile, ShaderGLSL::VERTEX_SHADER | ShaderGLSL::FRAGMENT_SHADER | ShaderGLSL::GEOMETRY_SHADER);
+    status = load_shader_from_file(polyShader, shaderFile, ShaderGLSL::VERTEX_SHADER | ShaderGLSL::FRAGMENT_SHADER);
+    if ( status == -1 )
+    {
+        fprintf(stderr, "Error on loading  %s\n", shaderFile);
+        exit( EXIT_FAILURE );
+    }
+    
+    
+    ShaderGLSL quadShader;
+    shaderFile = "../src/shaders/quad.glsl";
+    //~ int status = load_shader_from_file(shader, shaderFile, ShaderGLSL::VERTEX_SHADER | ShaderGLSL::FRAGMENT_SHADER | ShaderGLSL::GEOMETRY_SHADER);
+    status = load_shader_from_file(quadShader, shaderFile, ShaderGLSL::VERTEX_SHADER | ShaderGLSL::FRAGMENT_SHADER);
+    if ( status == -1 )
+    {
+        fprintf(stderr, "Error on loading  %s\n", shaderFile);
+        exit( EXIT_FAILURE );
+    }
+    
+
+    ParticleRenderer2D renderer(particleShader.program, polyShader.program, quadShader.program);
 
     // Création des particules
     ParticleManager particleManager;
@@ -97,8 +149,6 @@ int main() {
     // Temps s'écoulant entre chaque frame
     float dt = 0.f;
 
-	int i = 0;
-	
 	float pas = 0.001;
 	
 	bool open = false;
@@ -150,7 +200,88 @@ int main() {
 		fprintf(stderr, "Could not init GUI renderer.\n");
 		exit(EXIT_FAILURE);
 	}
+
 	
+	// -----
+	// Post-traitement
+	// -----
+
+	
+	// Framebuffer
+	GLuint framebuffer;
+	glGenFramebuffers(1, &framebuffer);
+	
+	// Texture
+	GLuint texColorBuffer;
+	glGenTextures(1, &texColorBuffer);
+	
+	
+	// VAO du quad d'affichage
+	int quadTriangleCount = 2;
+	int quadTriangleList[] = {0,1,2, 2,1,3};
+	float quadVertices[] = 
+		{
+			-1.f,	1.f,
+			-1.f,	-1.f,
+			1.f,	1.f,
+			1.f,	-1.f
+		};
+	float quadUVs[] = 
+		{
+			0.f,	1.f,
+			0.f,	0.f,
+			1.f,	1.f,
+			1.f,	0.f
+		};
+	
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	
+	GLuint vbo[3];
+	glGenBuffers(3, vbo);
+	
+	glBindVertexArray(vao);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[0]);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quadTriangleList), quadTriangleList, GL_STATIC_DRAW);
+		
+		glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(GL_FLOAT)*2, (void*)0);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+			
+		glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GL_FLOAT)*2, (void *)0);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(quadUVs), quadUVs, GL_STATIC_DRAW);
+			
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	
+	
+	
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+		glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+			glTexImage2D(
+				GL_TEXTURE_2D, 0, GL_RGB, WINDOW_WIDTH, WINDOW_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL
+			);
+			
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			
+			glFramebufferTexture2D(
+				GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0
+			);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		
+		GLenum compStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		
+		if(compStatus == GL_FRAMEBUFFER_COMPLETE){
+			std::cout << "Framebuffer complet ! Code status : " << compStatus << std::endl;
+		}else{
+			std::cout << "Erreur : framebuffer incomplet - code status : " << compStatus << std::endl;
+		}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	
     while(!done) {
         wm.startMainLoop();
@@ -158,19 +289,30 @@ int main() {
         // Rendu
         renderer.clear();
         
-        // ---- test ----
         if(open){
-			//~ particleManager.addRandomParticles(100);
 			particleManager.addRandomParticles(1);
-			//~ particleManager.addParticle(glm::vec2(0, 0.5), 1, glm::vec3(100/(i+1), i, i), glm::vec2(glm::linearRand(-0.1,0.1),glm::linearRand(-0.1,0.1)));
-			
-			//~ std::cout << "i : " << i << std::endl;
-			i = 0;
 		}
 		
-		//~ ++i;
-        
-        particleManager.drawParticles(renderer);
+		// TEST FRAMEBUFFER
+		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+			glClear(GL_COLOR_BUFFER_BIT);
+			particleManager.drawParticles(renderer);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		
+		
+		// Affichage de la texture du framebuffer
+		renderer.drawQuad(vao, texColorBuffer, quadTriangleCount);
+		
+		
+		//~ glUseProgram(quadShader.program);
+		//~ glBindVertexArray(vao);
+			//~ glActiveTexture(GL_TEXTURE0);
+			//~ glBindTexture(GL_TEXTURE_2D, framebuffer);
+				//~ glDrawElements(GL_TRIANGLES, quadTriangleCount*3, GL_UNSIGNED_INT, (void*)0); // seg fault
+			//~ glBindTexture(GL_TEXTURE_2D, 0);
+			//~ glActiveTexture(0);
+		//~ glBindVertexArray(0);
+			
 		//~ box.draw(renderer, 2.f);
 		box2.draw(renderer, 2.f);
 		
@@ -476,8 +618,196 @@ int main() {
         dt = wm.update();
 	}
 	
+	// Framebuffer
+	glDeleteFramebuffers(1, &framebuffer);
+	glDeleteTextures(1, &texColorBuffer);
+	
+	
 	// imgui
     imguiRenderGLDestroy();
 
 	return EXIT_SUCCESS;
+}
+
+
+int  compile_and_link_shader(ShaderGLSL & shader, int typeMask, const char * sourceBuffer, int bufferSize)
+{
+    // Create program object
+    shader.program = glCreateProgram();
+    
+    //Handle Vertex Shader
+    GLuint vertexShaderObject ;
+    if (typeMask & ShaderGLSL::VERTEX_SHADER)
+    {
+        // Create shader object for vertex shader
+        vertexShaderObject = glCreateShader(GL_VERTEX_SHADER);
+        // Add #define VERTEX to buffer
+        const char * sc[3] = { "#version 330\n", "#define VERTEX\n", sourceBuffer};
+        glShaderSource(vertexShaderObject, 
+                       3, 
+                       sc,
+                       NULL);
+        // Compile shader
+        glCompileShader(vertexShaderObject);
+
+        // Get error log size and print it eventually
+        int logLength;
+        glGetShaderiv(vertexShaderObject, GL_INFO_LOG_LENGTH, &logLength);
+        if (logLength > 1)
+        {
+            char * log = new char[logLength];
+            glGetShaderInfoLog(vertexShaderObject, logLength, &logLength, log);
+            fprintf(stderr, "Error in compiling vertex shader : %s", log);
+            fprintf(stderr, "%s\n%s\n%s", sc[0], sc[1], sc[2]);
+            delete[] log;
+        }
+        // If an error happend quit
+        int status;
+        glGetShaderiv(vertexShaderObject, GL_COMPILE_STATUS, &status);
+        if (status == GL_FALSE)
+            return -1;          
+
+        //Attach shader to program
+        glAttachShader(shader.program, vertexShaderObject);
+    }
+
+    // Handle Geometry shader
+    GLuint geometryShaderObject ;
+    if (typeMask & ShaderGLSL::GEOMETRY_SHADER)
+    {
+        // Create shader object for Geometry shader
+        geometryShaderObject = glCreateShader(GL_GEOMETRY_SHADER);
+        // Add #define Geometry to buffer
+        const char * sc[3] = { "#version 330\n", "#define GEOMETRY\n", sourceBuffer};
+        glShaderSource(geometryShaderObject, 
+                       3, 
+                       sc,
+                       NULL);
+        // Compile shader
+        glCompileShader(geometryShaderObject);
+
+        // Get error log size and print it eventually
+        int logLength;
+        glGetShaderiv(geometryShaderObject, GL_INFO_LOG_LENGTH, &logLength);
+        if (logLength > 1)
+        {
+            char * log = new char[logLength];
+            glGetShaderInfoLog(geometryShaderObject, logLength, &logLength, log);
+            fprintf(stderr, "Error in compiling Geometry shader : %s \n", log);
+            fprintf(stderr, "%s\n%s\n%s", sc[0], sc[1], sc[2]);
+            delete[] log;
+        }
+        // If an error happend quit
+        int status;
+        glGetShaderiv(geometryShaderObject, GL_COMPILE_STATUS, &status);
+        if (status == GL_FALSE)
+            return -1;          
+
+        //Attach shader to program
+        glAttachShader(shader.program, geometryShaderObject);
+    }
+
+
+    // Handle Fragment shader
+    GLuint fragmentShaderObject ;
+    if (typeMask && ShaderGLSL::FRAGMENT_SHADER)
+    {
+        // Create shader object for fragment shader
+        fragmentShaderObject = glCreateShader(GL_FRAGMENT_SHADER);
+        // Add #define fragment to buffer
+        const char * sc[3] = { "#version 330\n", "#define FRAGMENT\n", sourceBuffer};
+        glShaderSource(fragmentShaderObject, 
+                       3, 
+                       sc,
+                       NULL);
+        // Compile shader
+        glCompileShader(fragmentShaderObject);
+
+        // Get error log size and print it eventually
+        int logLength;
+        glGetShaderiv(fragmentShaderObject, GL_INFO_LOG_LENGTH, &logLength);
+        if (logLength > 1)
+        {
+            char * log = new char[logLength];
+            glGetShaderInfoLog(fragmentShaderObject, logLength, &logLength, log);
+            fprintf(stderr, "Error in compiling fragment shader : %s \n", log);
+            fprintf(stderr, "%s\n%s\n%s", sc[0], sc[1], sc[2]);
+            delete[] log;
+        }
+        // If an error happend quit
+        int status;
+        glGetShaderiv(fragmentShaderObject, GL_COMPILE_STATUS, &status);
+        if (status == GL_FALSE)
+            return -1;          
+
+        //Attach shader to program
+        glAttachShader(shader.program, fragmentShaderObject);
+    }
+
+
+    // Bind attribute location
+    //~ glBindAttribLocation(shader.program,  0,  "VertexPosition");
+    //~ glBindAttribLocation(shader.program,  1,  "VertexNormal");
+    //~ glBindAttribLocation(shader.program,  2,  "VertexTexCoord");
+    //~ glBindFragDataLocation(shader.program, 0, "Color");
+    //~ glBindFragDataLocation(shader.program, 1, "Normal");
+
+    // Link attached shaders
+    glLinkProgram(shader.program);
+
+    // Clean
+    if (typeMask & ShaderGLSL::VERTEX_SHADER)
+    {
+        glDeleteShader(vertexShaderObject);
+    }
+    if (typeMask && ShaderGLSL::GEOMETRY_SHADER)
+    {
+        glDeleteShader(fragmentShaderObject);
+    }
+    if (typeMask && ShaderGLSL::FRAGMENT_SHADER)
+    {
+        glDeleteShader(fragmentShaderObject);
+    }
+
+    // Get link error log size and print it eventually
+    int logLength;
+    glGetProgramiv(shader.program, GL_INFO_LOG_LENGTH, &logLength);
+    if (logLength > 1)
+    {
+        char * log = new char[logLength];
+        glGetProgramInfoLog(shader.program, logLength, &logLength, log);
+        fprintf(stderr, "Error in linking shaders : %s \n", log);
+        delete[] log;
+    }
+    int status;
+    glGetProgramiv(shader.program, GL_LINK_STATUS, &status);        
+    if (status == GL_FALSE)
+        return -1;
+
+
+    return 0;
+}
+
+int  destroy_shader(ShaderGLSL & shader)
+{
+    glDeleteProgram(shader.program);
+    shader.program = 0;
+    return 0;
+}
+
+int load_shader_from_file(ShaderGLSL & shader, const char * path, int typemask)
+{
+    int status;
+    FILE * shaderFileDesc = fopen( path, "rb" );
+    if (!shaderFileDesc)
+        return -1;
+    fseek ( shaderFileDesc , 0 , SEEK_END );
+    long fileSize = ftell ( shaderFileDesc );
+    rewind ( shaderFileDesc );
+    char * buffer = new char[fileSize + 1];
+    fread( buffer, 1, fileSize, shaderFileDesc );
+    buffer[fileSize] = '\0';
+    status = compile_and_link_shader( shader, typemask, buffer, fileSize );
+    delete[] buffer;
+    return status;
 }
