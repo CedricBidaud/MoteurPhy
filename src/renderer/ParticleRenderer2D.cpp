@@ -168,6 +168,8 @@ ParticleRenderer2D::ParticleRenderer2D(GLuint particleProgram, GLuint polyProgra
     m_uPolygonColor = glGetUniformLocation(m_PolygonProgramID, "uPolygonColor");
     
     m_uQuadTexture = glGetUniformLocation(m_QuadProgramID, "Texture");
+    m_uQuadBlurSize = glGetUniformLocation(m_QuadProgramID, "uBlurSize");
+    //~ m_uQuadPasse = glGetUniformLocation(m_QuadProgramID, "Passe");
 
     // CrÃ©ation du VBO
     glGenBuffers(1, &m_VBOID);
@@ -265,13 +267,16 @@ void ParticleRenderer2D::drawPolygon(uint32_t count,
     glBindVertexArray(0);
 }
 
-void ParticleRenderer2D::drawQuad(GLuint vao, GLuint framebuffer, int quadTriangleCount){
+void ParticleRenderer2D::drawQuad(GLuint vao, GLuint framebuffer, int quadTriangleCount, float blurSize, int passe){
 	glUseProgram(m_QuadProgramID);
 	
 	glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, framebuffer);
     
+    //~ glUniform1i(m_uQuadPasse, passe);
+    
     glUniform1i(m_uQuadTexture, 0);
+    glUniform1f(m_uQuadBlurSize, blurSize);
 	
 	glBindVertexArray(vao);
 		

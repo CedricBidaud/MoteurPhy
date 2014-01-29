@@ -426,6 +426,16 @@ core/setup.hpp
 ./core/_swizzle.hpp
 ../third-party/glm-0.9.4.6/glm/gtc/.././core/_swizzle.hpp
 
+../third-party/glm-0.9.4.6/glm/gtc/../gtc/../gtc/constants.hpp
+../glm.hpp
+../third-party/glm-0.9.4.6/glm/gtc/../gtc/../gtc/../glm.hpp
+../gtc/half_float.hpp
+../third-party/glm-0.9.4.6/glm/gtc/../gtc/../gtc/../gtc/half_float.hpp
+constants.inl
+../third-party/glm-0.9.4.6/glm/gtc/../gtc/../gtc/constants.inl
+
+../third-party/glm-0.9.4.6/glm/gtc/../gtc/../gtc/constants.inl
+
 ../third-party/glm-0.9.4.6/glm/gtc/../gtc/half_float.hpp
 ../glm.hpp
 ../third-party/glm-0.9.4.6/glm/gtc/../gtc/../glm.hpp
@@ -433,6 +443,20 @@ half_float.inl
 ../third-party/glm-0.9.4.6/glm/gtc/../gtc/half_float.inl
 
 ../third-party/glm-0.9.4.6/glm/gtc/../gtc/half_float.inl
+
+../third-party/glm-0.9.4.6/glm/gtc/../gtc/quaternion.hpp
+../glm.hpp
+../third-party/glm-0.9.4.6/glm/gtc/../gtc/../glm.hpp
+../gtc/half_float.hpp
+../third-party/glm-0.9.4.6/glm/gtc/../gtc/../gtc/half_float.hpp
+../gtc/constants.hpp
+../third-party/glm-0.9.4.6/glm/gtc/../gtc/../gtc/constants.hpp
+quaternion.inl
+../third-party/glm-0.9.4.6/glm/gtc/../gtc/quaternion.inl
+
+../third-party/glm-0.9.4.6/glm/gtc/../gtc/quaternion.inl
+limits
+-
 
 ../third-party/glm-0.9.4.6/glm/gtc/random.hpp
 ../glm.hpp
@@ -447,6 +471,20 @@ ctime
 -
 cassert
 -
+
+../third-party/glm-0.9.4.6/glm/gtc/type_ptr.hpp
+../glm.hpp
+../third-party/glm-0.9.4.6/glm/gtc/../glm.hpp
+../gtc/half_float.hpp
+../third-party/glm-0.9.4.6/glm/gtc/../gtc/half_float.hpp
+../gtc/quaternion.hpp
+../third-party/glm-0.9.4.6/glm/gtc/../gtc/quaternion.hpp
+cstring
+-
+type_ptr.inl
+../third-party/glm-0.9.4.6/glm/gtc/type_ptr.inl
+
+../third-party/glm-0.9.4.6/glm/gtc/type_ptr.inl
 
 ../third-party/my_imgui/imgui.h
 
@@ -571,6 +609,18 @@ imgui.h
 /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/src/imgui.h
 imguiRenderGL.h
 /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/src/imguiRenderGL.h
+
+/home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/src/renderer/GLtools.hpp
+GL/glew.h
+-
+
+/home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/src/renderer/ParticleRenderer2D.cpp
+ParticleRenderer2D.hpp
+/home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/src/renderer/ParticleRenderer2D.hpp
+GLtools.hpp
+/home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/src/renderer/GLtools.hpp
+glm/gtc/type_ptr.hpp
+-
 
 /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/src/renderer/ParticleRenderer2D.hpp
 GL/glew.h

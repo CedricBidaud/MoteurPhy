@@ -191,8 +191,9 @@ int main() {
 	int toggle = 0;
 	
 	bool repulsiveIHM = true;
-	//~ bool stickyIHM = true;
 	bool brakeIHM = true;
+	bool postIHM = true;
+	
 	bool link = false;
 	
 	
@@ -211,9 +212,15 @@ int main() {
 	GLuint framebuffer;
 	glGenFramebuffers(1, &framebuffer);
 	
+	GLuint blurFramebuffer;
+	glGenFramebuffers(1, &blurFramebuffer);
+	
 	// Texture
 	GLuint texColorBuffer;
 	glGenTextures(1, &texColorBuffer);
+	
+	GLuint texColorBlurBuffer;
+	glGenTextures(1, &texColorBlurBuffer);
 	
 	
 	// VAO du quad d'affichage
@@ -233,6 +240,9 @@ int main() {
 			1.f,	1.f,
 			1.f,	0.f
 		};
+		
+	float blurSize = 4.0f;	
+	
 	
 	GLuint vao;
 	glGenVertexArrays(1, &vao);
@@ -283,6 +293,30 @@ int main() {
 		}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, blurFramebuffer);
+		glBindTexture(GL_TEXTURE_2D, texColorBlurBuffer);
+			glTexImage2D(
+				GL_TEXTURE_2D, 0, GL_RGB, WINDOW_WIDTH, WINDOW_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL
+			);
+			
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			
+			glFramebufferTexture2D(
+				GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBlurBuffer, 0
+			);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		
+		compStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		
+		if(compStatus == GL_FRAMEBUFFER_COMPLETE){
+			std::cout << "Framebuffer complet ! Code status : " << compStatus << std::endl;
+		}else{
+			std::cout << "Erreur : framebuffer incomplet - code status : " << compStatus << std::endl;
+		}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	
     while(!done) {
         wm.startMainLoop();
 
@@ -300,18 +334,14 @@ int main() {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		
 		
-		// Affichage de la texture du framebuffer
-		renderer.drawQuad(vao, texColorBuffer, quadTriangleCount);
+		// Affichage de la texture (passage dans le shader pour blur et seuillage)
+		//~ glBindFramebuffer(GL_FRAMEBUFFER, blurFramebuffer); // deuxième blur inutile
+			//~ glClear(GL_COLOR_BUFFER_BIT);
+			renderer.drawQuad(vao, texColorBuffer, quadTriangleCount, blurSize, 0);
+		//~ glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		
-		
-		//~ glUseProgram(quadShader.program);
-		//~ glBindVertexArray(vao);
-			//~ glActiveTexture(GL_TEXTURE0);
-			//~ glBindTexture(GL_TEXTURE_2D, framebuffer);
-				//~ glDrawElements(GL_TRIANGLES, quadTriangleCount*3, GL_UNSIGNED_INT, (void*)0); // seg fault
-			//~ glBindTexture(GL_TEXTURE_2D, 0);
-			//~ glActiveTexture(0);
-		//~ glBindVertexArray(0);
+		// --- TEST DEUXIEME FLOU ---
+		//~ renderer.drawQuad(vao, texColorBlurBuffer, quadTriangleCount, blurSize, 1);
 			
 		//~ box.draw(renderer, 2.f);
 		box2.draw(renderer, 2.f);
@@ -388,18 +418,21 @@ int main() {
 				
 				if(imguiItem("Repulsive Force", repulsiveIHM)){
 					repulsiveIHM = false;
-					//~ stickyIHM = true;
 					brakeIHM = true;
+					postIHM = true;
 				}
 				
 				if(imguiItem("Brake Force", brakeIHM)){
 					brakeIHM = false;
 					repulsiveIHM = true;
-					//~ stickyIHM = true;
-					//~ std::cout << "test brake item" << std::endl;
+					postIHM = true;
 				}
 				
-				//~ imguiLabel("Test Scroller");
+				if(imguiItem("Shading", postIHM)){
+					postIHM = false;
+					repulsiveIHM = true;
+					brakeIHM = true;
+				}
 				
 				imguiSeparatorLine();
 				
@@ -438,6 +471,12 @@ int main() {
 					imguiSlider("Brake V", &brakeForce.m_fV, 0.f, 1.f, 0.001f);
 					imguiSlider("Brake L", &brakeForce.m_fL, 0.f, 0.8f, 0.001f);
 					imguiSlider("Brake Amort", &brakeForce.m_fAmort, 0.0f, 0.01f, 0.0001f);
+				}
+				
+				if(postIHM == false){
+					imguiLabel("Shading");
+					
+					imguiSlider("Blur size", &blurSize, 1.f, 20.f, 0.5f);
 				}
 				
 				imguiSeparator();
@@ -620,7 +659,9 @@ int main() {
 	
 	// Framebuffer
 	glDeleteFramebuffers(1, &framebuffer);
+	glDeleteFramebuffers(1, &blurFramebuffer);
 	glDeleteTextures(1, &texColorBuffer);
+	glDeleteTextures(1, &texColorBlurBuffer);
 	
 	
 	// imgui

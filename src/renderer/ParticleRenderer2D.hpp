@@ -29,7 +29,7 @@ public:
                      const glm::vec3& color,
                      float lineWidth = 1.f);
                      
-    void drawQuad(GLuint vao, GLuint texture, int quadTriangleCount);
+    void drawQuad(GLuint vao, GLuint texture, int quadTriangleCount, float blurSize, int passe);
 
 private:
     static const GLchar *VERTEX_SHADER, *FRAGMENT_SHADER;
@@ -50,6 +50,8 @@ private:
     GLint m_uPolygonColor;
     
     GLint m_uQuadTexture;
+    GLint m_uQuadBlurSize;
+    GLint m_uQuadPasse;
 
     // Scale appliquÃ© sur la masse de chaque particule pour obtenir sa taille
     float m_fMassScale;

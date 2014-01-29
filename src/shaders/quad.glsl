@@ -64,16 +64,23 @@ out vec4 fFragColor;
 
 uniform sampler2D Texture;
 
-const float blurSizeH = 4.0 / 1024.0;
-const float blurSizeV = 4.0 / 1024.0;
+uniform float uBlurSize = 4.0;
+uniform int Passe;
 
 void main() {
 	//~ fFragColor = vec3(vTexCoord.x, vTexCoord.y, 0.0);
 	
 	vec4 color = vec4(0.f);
 	
-	int blurSize = 5;
-	int blurHalfSize = (blurSize - 1) / 2;
+	float blurSize = uBlurSize;
+	
+	//~ if(Passe == 1) blurSize = 4.0;
+	
+	float blurSizeH = blurSize / 1024.0;
+	float blurSizeV = blurSize / 1024.0;
+	
+	int blurKernelSize = 3;
+	int blurHalfSize = (blurKernelSize - 1) / 2;
 	
 	for(int i = -blurHalfSize; i <= blurHalfSize; ++i){
 		for(int j = -blurHalfSize; j <= blurHalfSize; ++j){
@@ -82,7 +89,22 @@ void main() {
 			
 		}
 	}
-	fFragColor = color/(blurSize * blurSize);
+	
+	color /= (blurKernelSize * blurKernelSize);
+	
+	
+	if(color.r > 0.2 && color.r < 0.3) color.r = 0.25;
+	if(color.r > 0.3 && color.r < 0.5) color.r = 0.45;
+	if(color.r > 0.5 && color.r < 0.7) color.r = 0.65;
+	if(color.r > 0.7) color.r = 0.95;
+	
+	if(color.g > 0.2 && color.g < 0.3) color.g = 0.25;
+	if(color.g > 0.3 && color.g < 0.5) color.g = 0.35;
+	if(color.g > 0.5 && color.g < 0.7) color.g = 0.55;
+	if(color.g > 0.7) color.g = 0.75;
+	
+	
+	fFragColor = color;
 }
 
 #endif
