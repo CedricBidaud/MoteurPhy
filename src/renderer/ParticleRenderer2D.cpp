@@ -246,6 +246,35 @@ void ParticleRenderer2D::drawParticles(
     glDisable(GL_BLEND);
 }
 
+void ParticleRenderer2D::drawParticles(
+        uint32_t count,
+        const glm::vec2* positionArray,
+        const float* massArray,
+        const glm::vec3* colorArray,
+        float size) {
+    // Active la gestion de la transparence
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glDisable(GL_DEPTH_TEST);
+
+    glUseProgram(m_ProgramID);
+
+    glBindVertexArray(m_VAOID);
+
+    // Dessine chacune des particules
+    for(uint32_t i = 0; i < count; ++i) {
+        glUniform3fv(m_uParticleColor, 1, glm::value_ptr(colorArray[i]));
+        glUniform2fv(m_uParticlePosition, 1, glm::value_ptr(positionArray[i]));
+        glUniform1f(m_uParticleScale, m_fMassScale * size);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    }
+
+    glBindVertexArray(0);
+
+    glDisable(GL_BLEND);
+}
+
 void ParticleRenderer2D::drawPolygon(uint32_t count,
                  const glm::vec2* position,
                  const glm::vec3& color,

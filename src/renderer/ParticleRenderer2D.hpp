@@ -23,6 +23,12 @@ public:
                        const glm::vec2* positionArray,
                        const float* massArray,
                        const glm::vec3* colorArray);
+                       
+    void drawParticles(uint32_t count,
+                       const glm::vec2* positionArray,
+                       const float* massArray,
+                       const glm::vec3* colorArray,
+                       float size);
 
     void drawPolygon(uint32_t count,
                      const glm::vec2* position,

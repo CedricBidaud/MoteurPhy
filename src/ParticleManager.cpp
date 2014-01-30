@@ -50,6 +50,15 @@ void ParticleManager::drawParticles(ParticleRenderer2D& renderer) {
 		&m_colorArray[0]
 	);
 }
+void ParticleManager::drawParticles(ParticleRenderer2D& renderer, float size) {
+	renderer.drawParticles(
+		m_positionArray.size(),
+		&m_positionArray[0],
+		&m_massArray[0],
+		&m_colorArray[0],
+		size
+	);
+}
 
 unsigned int ParticleManager::getSize() {
 	return m_positionArray.size();

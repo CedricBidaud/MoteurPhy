@@ -241,7 +241,8 @@ int main() {
 			1.f,	0.f
 		};
 		
-	float blurSize = 4.0f;	
+	float blurSize = 4.0f;
+	float particleSize = 1.0f;
 	
 	
 	GLuint vao;
@@ -330,7 +331,7 @@ int main() {
 		// TEST FRAMEBUFFER
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 			glClear(GL_COLOR_BUFFER_BIT);
-			particleManager.drawParticles(renderer);
+			particleManager.drawParticles(renderer, particleSize);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		
 		
@@ -477,6 +478,7 @@ int main() {
 					imguiLabel("Shading");
 					
 					imguiSlider("Blur size", &blurSize, 1.f, 20.f, 0.5f);
+					imguiSlider("Particle size", &particleSize, 0.1f, 3.0f, 0.01f);
 				}
 				
 				imguiSeparator();

@@ -35,6 +35,7 @@ class ParticleManager{
 		void printForces();
 		
 		void drawParticles(ParticleRenderer2D& renderer);
+		void drawParticles(ParticleRenderer2D& renderer, float size);
 		
 		
 	private:
