@@ -33,9 +33,6 @@ namespace imac3 {
 					if(norm < m_fLInf - 0.04f){
 						force = m_fKRep*(1-(m_fLInf-0.04f)/glm::max(norm,0.0001f))*(vect);
 					}
-					//~ if(norm > m_fLSup && norm < m_fLSup + 0.05f){
-						//~ force = m_fKRep*(1-(m_fLSup + 0.05f)/glm::max(norm,0.0001f))*(vect);
-					//~ }
 					
 					// Sticky
 					if(norm > m_fLInf && norm < m_fLSup){

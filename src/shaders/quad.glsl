@@ -68,13 +68,9 @@ uniform float uBlurSize = 4.0;
 uniform int Passe;
 
 void main() {
-	//~ fFragColor = vec3(vTexCoord.x, vTexCoord.y, 0.0);
-	
 	vec4 color = vec4(0.f);
 	
 	float blurSize = uBlurSize;
-	
-	//~ if(Passe == 1) blurSize = 4.0;
 	
 	float blurSizeH = blurSize / 1024.0;
 	float blurSizeV = blurSize / 1024.0;
@@ -91,7 +87,6 @@ void main() {
 	}
 	
 	color /= (blurKernelSize * blurKernelSize);
-	
 	
 	if(color.r > 0.2 && color.r < 0.3) color.r = 0.25;
 	if(color.r > 0.3 && color.r < 0.5) color.r = 0.45;

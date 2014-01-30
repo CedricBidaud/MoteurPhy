@@ -16,16 +16,10 @@ namespace imac3 {
 	}
 	
 	glm::vec2 PolygonForce::computeForce(float elasticity, glm::vec2 velocity, glm::vec2 normale, float mass, float dt){
-		//~ std::cout << "Elasticity :" << elasticity << std::endl;
-		//~ std::cout << "Velocity :" << velocity.x << ", " << velocity.y << std::endl;
-		//~ std::cout << "Normale (poly) :" << normale.x << ", " << normale.y << std::endl;
-		//~ std::cout << "Masse :" << mass << std::endl;
-		//~ std::cout << "Dt :" << dt << std::endl;
 		return glm::vec2(elasticity*glm::dot(velocity,-normale)*(mass/dt)*normale);
 	}
 	
 	void PolygonForce::apply(ParticleManager &pm){
-		//~ std::cout << "Dt : " << m_fDt << std::endl;
 		for(int i = 0; i < pm.getSize(); ++i){ // loop sur les particules du ParticleManager
 			Leapfrog::ParticleState actualState;
 			actualState.position = pm.getParticlePosition(i);
@@ -33,9 +27,6 @@ namespace imac3 {
 			
 			Leapfrog::ParticleState nextState = Leapfrog::getNextState(i, pm, m_fDt);
 			
-			//~ std::cout << "actual pos : " << actualState.position.x << ", " << actualState.position.y << std::endl;
-			//~ std::cout << "next pos : " << nextState.position.x << ", " << nextState.position.y << std::endl;
-			// OK
 			if(m_Polygon->isInner()){
 				for(int j = 0; j < m_Polygon->getSize(); ++j){ // loop sur les arretes du poly
 					int k = (j+1)%m_Polygon->getSize();
@@ -45,12 +36,7 @@ namespace imac3 {
 					
 					bool isIntersected = intersect(actualState.position, nextState.position, m_Polygon->getPosition(j), m_Polygon->getPosition(k), &intersection, &normale);
 					if(isIntersected) {
-						//std::cout << "COLLISION INNER" << std::endl;
-						
-						//~ std::cout << "Normale (after intersect) : " << normale.x << ", " << normale.y << std::endl;
-						
 						glm::vec2 force = PolygonForce::computeForce(m_fElasticity, nextState.velocity, normale, pm.getParticleMass(i), m_fDt); 
-						//std::cout << "force : " << force.x << ", " << force.y << std::endl;
 						pm.addForce(i, force);
 					}
 				} // end for arretes poly
@@ -65,9 +51,7 @@ namespace imac3 {
 					
 					bool isIntersected = intersect(actualState.position, nextState.position, m_Polygon->getPosition(j), m_Polygon->getPosition(k), &intersection, &normale);
 					if(isIntersected) {
-						//std::cout << "COLLISION OUTTER" << std::endl;
 						glm::vec2 force = PolygonForce::computeForce(m_fElasticity, nextState.velocity, normale, pm.getParticleMass(i), m_fDt); 
-						//std::cout << "force : " << force.x << ", " << force.y << std::endl;
 						pm.addForce(i, force);
 					}
 				} // end for

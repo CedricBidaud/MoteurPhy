@@ -9,9 +9,7 @@ namespace imac3 {
 			force = pm.getParticleForce(i);
 			velocity = pm.getParticleVelocity(i);
 			mass = pm.getParticleMass(i);
-			//std::cout << "Position : " << position.x << ", " << position.y << std::endl;
-			//force.x /= mass;
-			//force.y /= mass;
+			
 			glm::vec2 nextVelocity = velocity + dt*(force/mass);
 			glm::vec2 nextPosition = position + dt*nextVelocity;
 

@@ -14,10 +14,7 @@ void main() {
 	vFragPosition = VertexPosition;
 	vTexCoord = VertexTexCoord;
 	
-	//~ vec2 tempPos = uParticlePosition + uParticleScale * VertexPosition;
-	
 	gl_Position = vec4(uParticlePosition + uParticleScale * VertexPosition, 0.f, 1.f);
-	//~ gl_Position = vec4(tempPos, 0.f, 1.f);
 }
 
 #endif

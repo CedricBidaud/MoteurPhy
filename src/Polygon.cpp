@@ -86,8 +86,6 @@ namespace imac3{
 		float _sin = sin(3.1416*angleInDegrees/180);
 		
 		for(int i = 0; i < m_pointsArray.size(); ++i){
-			//~ tempPoint = m_pointsArray[i];
-			//~ m_pointsArray[i] = glm::vec2(tempPoint.x*_cos - tempPoint.y*_sin, tempPoint.x*_sin+tempPoint.y*_cos);
 			m_pointsArray[i] = glm::vec2(m_pointsArray[i].x*_cos - m_pointsArray[i].y*_sin, m_pointsArray[i].x*_sin+m_pointsArray[i].y*_cos);
 		}
 	}

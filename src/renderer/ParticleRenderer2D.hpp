@@ -59,7 +59,7 @@ private:
     GLint m_uQuadBlurSize;
     GLint m_uQuadPasse;
 
-    // Scale appliquÃ© sur la masse de chaque particule pour obtenir sa taille
+    // Scale appliqué sur la masse de chaque particule pour obtenir sa taille
     float m_fMassScale;
 };
 

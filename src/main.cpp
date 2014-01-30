@@ -198,15 +198,9 @@ int main() {
 	GLuint framebuffer;
 	glGenFramebuffers(1, &framebuffer);
 	
-	//~ GLuint blurFramebuffer;
-	//~ glGenFramebuffers(1, &blurFramebuffer);
-	
 	// Texture
 	GLuint texColorBuffer;
 	glGenTextures(1, &texColorBuffer);
-	
-	//~ GLuint texColorBlurBuffer;
-	//~ glGenTextures(1, &texColorBlurBuffer);
 	
 	
 	// VAO du quad d'affichage
@@ -237,6 +231,7 @@ int main() {
 	GLuint vbo[3];
 	glGenBuffers(3, vbo);
 	
+	// renseignement du vao
 	glBindVertexArray(vao);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[0]);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quadTriangleList), quadTriangleList, GL_STATIC_DRAW);
@@ -254,9 +249,7 @@ int main() {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	
-	
-	
-	
+	// link du framebuffer et de la texture
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 		glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 			glTexImage2D(
@@ -281,29 +274,6 @@ int main() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	
 	
-	//~ glBindFramebuffer(GL_FRAMEBUFFER, blurFramebuffer);
-		//~ glBindTexture(GL_TEXTURE_2D, texColorBlurBuffer);
-			//~ glTexImage2D(
-				//~ GL_TEXTURE_2D, 0, GL_RGB, WINDOW_WIDTH, WINDOW_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL
-			//~ );
-			//~ 
-			//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			//~ 
-			//~ glFramebufferTexture2D(
-				//~ GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBlurBuffer, 0
-			//~ );
-		//~ glBindTexture(GL_TEXTURE_2D, 0);
-		//~ 
-		//~ compStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		//~ 
-		//~ if(compStatus == GL_FRAMEBUFFER_COMPLETE){
-			//~ std::cout << "Framebuffer complet ! Code status : " << compStatus << std::endl;
-		//~ }else{
-			//~ std::cout << "Erreur : framebuffer incomplet - code status : " << compStatus << std::endl;
-		//~ }
-	//~ glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	
     while(!done) {
         wm.startMainLoop();
 
@@ -314,7 +284,7 @@ int main() {
 			particleManager.addRandomParticles(1);
 		}
 		
-		// TEST FRAMEBUFFER
+		// Écriture de l'image dans le framebuffer
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 			glClear(GL_COLOR_BUFFER_BIT);
 			particleManager.drawParticles(renderer, particleSize);
@@ -322,7 +292,7 @@ int main() {
 		
 		
 		// Affichage de la texture (passage dans le shader pour blur et seuillage)
-			renderer.drawQuad(vao, texColorBuffer, quadTriangleCount, blurSize, 0);
+		renderer.drawQuad(vao, texColorBuffer, quadTriangleCount, blurSize, 0);
 		
 		
 		// Simulation
@@ -577,9 +547,7 @@ int main() {
 	
 	// Framebuffer
 	glDeleteFramebuffers(1, &framebuffer);
-	//~ glDeleteFramebuffers(1, &blurFramebuffer);
 	glDeleteTextures(1, &texColorBuffer);
-	//~ glDeleteTextures(1, &texColorBlurBuffer);
 	
 	
 	// imgui

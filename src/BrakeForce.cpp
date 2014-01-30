@@ -30,7 +30,6 @@ namespace imac3 {
 					glm::vec2 p2 = pm.getParticlePosition(j);
 
 					if(m_fDt > 0){
-						//std::cout << "TEST" << std::endl;
 						glm::vec2 force = glm::vec2(0.0, 0.0);
 						
 						float norm = glm::length(p2-p1);
@@ -38,27 +37,7 @@ namespace imac3 {
 						if(norm < m_fL){
 							force = m_fV*((v2-v1)/m_fDt);
 						}
-							
 						
-						//~ if(glm::length(v1) > 0.2f){
-							//~ std::cout << "V : " << glm::length(v1) << std::endl;
-							//~ pm.setParticleVelocity(i, v1*0.9f);
-						//~ }
-						
-						//~ force *= 1.0/pow(norm, 0.2);
-							
-						//~ std::cout << "test norm : " << norm << std::endl;
-						
-						//~ if(norm < 0.10 && norm > 0.0)
-							//~ force *= 100.0;
-						
-/*
-						std::cout << "V : " << m_fV << std::endl;
-
-						std::cout << "v1 : " << v1.x << ", " << v1.y << std::endl;
-						std::cout << "v2 : " << v2.x << ", " << v2.y << std::endl;
-						std::cout << "Force : " << force.x << ", " << force.y << std::endl;
-*/						
 						// amortissement
 						if(m_fAmort > 0.0f){
 							glm::vec2 amortissment = glm::vec2(0.0);
