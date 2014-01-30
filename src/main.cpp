@@ -108,7 +108,8 @@ int main() {
 	
 	
 	// ----- Boxes -----
-	Polygon box2 = Polygon::buildBox(glm::vec3(0.2,0.2,0.9), glm::vec2(0.2,-0.3), 1.0, 2.0, -30.0f);
+	//~ static Polygon 		buildBox(glm::vec3 color, 		 glm::vec2 position,  float width, float height, float rotationInDegrees);
+	Polygon box2 = Polygon::buildBox(glm::vec3(0.2,0.2,0.9), glm::vec2(0.,0.), 1.0, 		   2.0, 		 30.0f);
     
     Polygon boxL = Polygon::buildBox(glm::vec3(1.0), glm::vec2(-1.0,0.0),0.1,2.0,false);
     Polygon boxR = Polygon::buildBox(glm::vec3(1.0), glm::vec2(1.0,0.0),0.1,2.0,false);
@@ -134,6 +135,9 @@ int main() {
     polysAndForces.push_back(std::pair<Polygon, PolygonForce>(boxR, boxRPolyForce));
     polysAndForces.push_back(std::pair<Polygon, PolygonForce>(boxT, boxTPolyForce));
     polysAndForces.push_back(std::pair<Polygon, PolygonForce>(boxB, boxBPolyForce));
+    
+    //
+    glm::vec2 click;
     
 	
     // Temps s'écoulant entre chaque frame
@@ -439,12 +443,63 @@ int main() {
 					switch(e.button.button){
 						case SDL_BUTTON_LEFT:
 							is_lClicPressed = true;
+							click.x = (float(e.button.x) / WINDOW_WIDTH - 0.5f)*2.0;
+							click.y = (float(e.button.y) / WINDOW_HEIGHT - 0.5f)*(-2.0);
+							std::cout << "click : " << click.x << " - " << click.y << std::endl;
+							for(int i = 0; i < polysAndForces.size(); ++i){
+								Polygon poly = polysAndForces[i].first;
+								
+								float angle = poly.rotationInDegrees;
+								
+								poly.rotate(-angle);
+								
+								/*
+								glm::vec2 tempPoint;
+		
+								
+								for(int i = 0; i < m_pointsArray.size(); ++i){
+									m_pointsArray[i] = glm::vec2(m_pointsArray[i].x*_cos - m_pointsArray[i].y*_sin, m_pointsArray[i].x*_sin+m_pointsArray[i].y*_cos);
+								}
+								*/
+								
+								float _cos = cos(-3.1416*angle/180.0);
+								float _sin = sin(-3.1416*angle/180.0);
+								
+								glm::vec2 tempClick = glm::vec2(click.x*_cos - click.y*_sin, click.x*_sin+click.y*_cos);
+								
+								
+								float minX = 1000.0;
+								float maxX = -1000.0;
+								float minY = 1000.0;
+								float maxY = -1000.0;
+								
+								for(int j = 0; j < poly.getSize(); ++j){
+									glm::vec2 p = poly.m_pointsArray[j];
+									(p.x < minX) ? minX = p.x : minX;
+									(p.x > maxX) ? maxX = p.x : maxX;
+									(p.y < minY) ? minY = p.y : minY;
+									(p.y > maxY) ? maxY = p.y : maxY;
+								}
+								
+								std::cout << "minX : " << minX << ", minY : " << minY << ", maxX : " << maxX << ", maxY : " << maxY << std::endl;
+								
+								if(tempClick.x > minX && tempClick.x < maxX && tempClick.y > minY && tempClick.y < maxY){
+									std::cout << "In !" << std::endl;
+								}else{
+									std::cout << "Out !" << std::endl;
+								}
+								
+								std::cout << "" << std::endl;
+								
+							}
 							break;
 							
 						default:
 							break;
 					}
 					break;
+									
+									
 												
 				case SDL_MOUSEBUTTONUP:
 					switch(e.button.button){

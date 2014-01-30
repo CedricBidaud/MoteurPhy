@@ -19,14 +19,17 @@ namespace imac3{
 			void draw(ParticleRenderer2D& renderer, float lineWidth = 1.f) const;
 			unsigned int getSize() const;
 			glm::vec2 getPosition(int idx) const;
+			glm::vec2 center;
+			float rotationInDegrees = 0.0f;
 			bool isInner() const;
 			
 			void rotate(float angleInDegrees);
 			void scale(glm::vec2 s);
 			void translate(glm::vec2 t);
+			
+			std::vector<glm::vec2> m_pointsArray;
 	
 		private:
-			std::vector<glm::vec2> m_pointsArray;
 			glm::vec3 m_color;
 			bool m_isInner;
 	};

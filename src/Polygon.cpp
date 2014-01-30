@@ -13,14 +13,15 @@ namespace imac3{
 		poly.m_pointsArray.push_back(glm::vec2(position.x-width/2.f, position.y+height/2.f));
 
 		poly.m_isInner = isInner;
+		poly.center = position;
 
 		return poly;
 	}
 
 	Polygon Polygon::buildDefaultBox(glm::vec3 color){
 		
-		float width = 0.1f;
-		float height = 0.1f;
+		float width = 1.0f;
+		float height = 1.0f;
 		
 		glm::vec2 position(0.0f);
 		
@@ -32,6 +33,7 @@ namespace imac3{
 		poly.m_pointsArray.push_back(glm::vec2(position.x-width/2.f, position.y+height/2.f));
 
 		poly.m_isInner = false;
+		poly.center = position;
 
 		return poly;
 	}
@@ -39,6 +41,9 @@ namespace imac3{
 	Polygon Polygon::buildBox(glm::vec3 color, glm::vec2 position, float width, float height, float rotationInDegrees){
 		
 		Polygon poly = buildDefaultBox(color);
+		
+		poly.center = position;
+		poly.rotationInDegrees = rotationInDegrees;
 		
 		poly.scale(glm::vec2(width,height));
 		poly.rotate(rotationInDegrees);
@@ -82,8 +87,8 @@ namespace imac3{
 	void Polygon::rotate(float angleInDegrees){
 		glm::vec2 tempPoint;
 		
-		float _cos = cos(3.1416*angleInDegrees/180);
-		float _sin = sin(3.1416*angleInDegrees/180);
+		float _cos = cos(3.1416*angleInDegrees/180.0);
+		float _sin = sin(3.1416*angleInDegrees/180.0);
 		
 		for(int i = 0; i < m_pointsArray.size(); ++i){
 			m_pointsArray[i] = glm::vec2(m_pointsArray[i].x*_cos - m_pointsArray[i].y*_sin, m_pointsArray[i].x*_sin+m_pointsArray[i].y*_cos);
