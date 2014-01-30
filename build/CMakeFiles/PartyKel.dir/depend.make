@@ -512,6 +512,9 @@ CMakeFiles/PartyKel.dir/src/Polygon.cpp.o: ../third-party/glm-0.9.4.6/glm/./core
 CMakeFiles/PartyKel.dir/src/Polygon.cpp.o: ../third-party/glm-0.9.4.6/glm/core/_fixes.hpp
 CMakeFiles/PartyKel.dir/src/Polygon.cpp.o: ../third-party/glm-0.9.4.6/glm/core/setup.hpp
 CMakeFiles/PartyKel.dir/src/Polygon.cpp.o: ../third-party/glm-0.9.4.6/glm/glm.hpp
+CMakeFiles/PartyKel.dir/src/Polygon.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/../glm.hpp
+CMakeFiles/PartyKel.dir/src/Polygon.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/matrix_transform.hpp
+CMakeFiles/PartyKel.dir/src/Polygon.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/matrix_transform.inl
 CMakeFiles/PartyKel.dir/src/Polygon.cpp.o: ../src/Polygon.cpp
 CMakeFiles/PartyKel.dir/src/Polygon.cpp.o: ../src/Polygon.hpp
 CMakeFiles/PartyKel.dir/src/Polygon.cpp.o: ../src/renderer/ParticleRenderer2D.hpp
@@ -582,6 +585,8 @@ CMakeFiles/PartyKel.dir/src/PolygonForce.cpp.o: ../third-party/glm-0.9.4.6/glm/g
 CMakeFiles/PartyKel.dir/src/PolygonForce.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/../glm.hpp
 CMakeFiles/PartyKel.dir/src/PolygonForce.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/../gtc/half_float.hpp
 CMakeFiles/PartyKel.dir/src/PolygonForce.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/../gtc/half_float.inl
+CMakeFiles/PartyKel.dir/src/PolygonForce.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/matrix_transform.hpp
+CMakeFiles/PartyKel.dir/src/PolygonForce.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/matrix_transform.inl
 CMakeFiles/PartyKel.dir/src/PolygonForce.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/random.hpp
 CMakeFiles/PartyKel.dir/src/PolygonForce.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/random.inl
 CMakeFiles/PartyKel.dir/src/PolygonForce.cpp.o: ../src/Force.hpp
@@ -816,6 +821,8 @@ CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glm-0.9.4.6/glm/glm.hpp
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/../glm.hpp
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/../gtc/half_float.hpp
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/../gtc/half_float.inl
+CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/matrix_transform.hpp
+CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/matrix_transform.inl
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/random.hpp
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/glm-0.9.4.6/glm/gtc/random.inl
 CMakeFiles/PartyKel.dir/src/main.cpp.o: ../third-party/my_imgui/imgui.h

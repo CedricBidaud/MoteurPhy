@@ -10,6 +10,7 @@
 #include "renderer/ParticleRenderer2D.hpp"
 
 #include <vector>
+//~ #include <pair>
 
 #include "ParticleManager.hpp"
 #include "ConstantForce.hpp"
@@ -121,8 +122,9 @@ int main() {
 	//particleManager.printForces();
     
     // Polygon Polygon::buildBox(glm::vec3 color, glm::vec2 position, float width, float height, bool isInner)
-    Polygon box = Polygon::buildBox(glm::vec3(0.5,0.3,0.3), glm::vec2(0.f,0.f), 1.8f, 1.8f, true);
-    Polygon box2 = Polygon::buildBox(glm::vec3(0.5,0.3,0.3), glm::vec2(-0.2f,-0.5f), 0.5f, 0.3f, false);
+    //~ Polygon box = Polygon::buildBox(glm::vec3(0.5,0.3,0.3), glm::vec2(0.f,0.f), 1.8f, 1.8f, true);
+    //~ Polygon box2 = Polygon::buildBox(glm::vec3(0.5,0.3,0.3), glm::vec2(-0.2f,-0.5f), 0.5f, 0.3f, false);
+    Polygon box2 = Polygon::buildBox(glm::vec3(0.2,0.2,0.9), glm::vec2(0.2,-0.3), 1.0, 2.0, -30.0f);
     
     Polygon boxL = Polygon::buildBox(glm::vec3(1.0), glm::vec2(-1.0,0.0),0.1,2.0,false);
     Polygon boxR = Polygon::buildBox(glm::vec3(1.0), glm::vec2(1.0,0.0),0.1,2.0,false);
@@ -134,7 +136,7 @@ int main() {
 	
 	float polyStickyCoef = 1.005f;
 	
-	PolygonForce boxPolyForce(box, polyStickyCoef, leapfrog);
+	//~ PolygonForce boxPolyForce(box, polyStickyCoef, leapfrog);
 	PolygonForce box2PolyForce(box2, polyStickyCoef, leapfrog);
 	
 	PolygonForce boxLPolyForce(boxL, polyStickyCoef, leapfrog);
@@ -145,6 +147,13 @@ int main() {
 	//PolygonForce circlePolyForce(circle, 2.f, leapfrog);
 	//PolygonForce circle2PolyForce(circle2, 2.0f, leapfrog);
 	
+    std::vector<std::pair<Polygon, PolygonForce>> polysAndForces;
+    polysAndForces.push_back(std::pair<Polygon, PolygonForce>(box2, box2PolyForce));
+    polysAndForces.push_back(std::pair<Polygon, PolygonForce>(boxL, boxLPolyForce));
+    polysAndForces.push_back(std::pair<Polygon, PolygonForce>(boxR, boxRPolyForce));
+    polysAndForces.push_back(std::pair<Polygon, PolygonForce>(boxT, boxTPolyForce));
+    polysAndForces.push_back(std::pair<Polygon, PolygonForce>(boxB, boxBPolyForce));
+    
 	
     // Temps s'écoulant entre chaque frame
     float dt = 0.f;
@@ -345,12 +354,17 @@ int main() {
 		//~ renderer.drawQuad(vao, texColorBlurBuffer, quadTriangleCount, blurSize, 1);
 			
 		//~ box.draw(renderer, 2.f);
-		box2.draw(renderer, 2.f);
 		
-		boxL.draw(renderer, 2.f);
-		boxR.draw(renderer, 2.f);
-		boxT.draw(renderer, 2.f);
-		boxB.draw(renderer, 2.f);
+		//~ for(int i = 0; i < boxes.size(); ++i){
+			//~ boxes[i].draw(renderer);
+		//~ }
+		
+		//~ box2.draw(renderer, 2.f);
+		//~ 
+		//~ boxL.draw(renderer, 2.f);
+		//~ boxR.draw(renderer, 2.f);
+		//~ boxT.draw(renderer, 2.f);
+		//~ boxB.draw(renderer, 2.f);
         //circle.draw(renderer, 2.f);
         //circle2.draw(renderer, 2.f);
 
@@ -367,20 +381,26 @@ int main() {
         //~ boxPolyForce.setDt(dt);
         //~ boxPolyForce.apply(particleManager);
         
-        box2PolyForce.setDt(dt);
-        box2PolyForce.apply(particleManager);
+        for(int i = 0; i < polysAndForces.size(); ++i){
+			polysAndForces[i].first.draw(renderer);
+			polysAndForces[i].second.setDt(dt);
+			polysAndForces[i].second.apply(particleManager);
+		}
         
-        boxLPolyForce.setDt(dt);
-        boxLPolyForce.apply(particleManager);
-        
-        boxRPolyForce.setDt(dt);
-        boxRPolyForce.apply(particleManager);
-        
-        boxTPolyForce.setDt(dt);
-        boxTPolyForce.apply(particleManager);
-        
-        boxBPolyForce.setDt(dt);
-        boxBPolyForce.apply(particleManager);
+        //~ box2PolyForce.setDt(dt);
+        //~ box2PolyForce.apply(particleManager);
+        //~ 
+        //~ boxLPolyForce.setDt(dt);
+        //~ boxLPolyForce.apply(particleManager);
+        //~ 
+        //~ boxRPolyForce.setDt(dt);
+        //~ boxRPolyForce.apply(particleManager);
+        //~ 
+        //~ boxTPolyForce.setDt(dt);
+        //~ boxTPolyForce.apply(particleManager);
+        //~ 
+        //~ boxBPolyForce.setDt(dt);
+        //~ boxBPolyForce.apply(particleManager);
         
         //circlePolyForce.setDt(dt);
         //circlePolyForce.apply(particleManager);
