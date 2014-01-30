@@ -10,7 +10,6 @@
 #include "renderer/ParticleRenderer2D.hpp"
 
 #include <vector>
-//~ #include <pair>
 
 #include "ParticleManager.hpp"
 #include "ConstantForce.hpp"
@@ -24,8 +23,6 @@
 
 #include "imgui.h"
 #include "imguiRenderGL.h"
-
-//~ #include "utils.hpp"
 
 static const Uint32 WINDOW_WIDTH = 1024;
 static const Uint32 WINDOW_HEIGHT = 1024;
@@ -94,14 +91,7 @@ int main() {
 
     // Création des particules
     ParticleManager particleManager;
-    //particleManager.addParticle(glm::vec2(0, 0), 1, glm::vec3(1, 1, 1), glm::vec2(0.f));
-	//particleManager.addCircleParticles(0.5f, 18);
-	particleManager.addRandomParticles(1);
-/*
-    particleManager.addParticle(glm::vec2(-0.3f, 0.0f), 1, glm::vec3(1, 0, 1), glm::vec2(0.f));
-    particleManager.addParticle(glm::vec2(0.3f, 0.0f), 1, glm::vec3(0, 1, 1), glm::vec2(0.f));
-    particleManager.addParticle(glm::vec2(0.2f, 0.4f), 1, glm::vec3(1, 1, 0), glm::vec2(0.f));
-*/
+    particleManager.addRandomParticles(1);
 
 	Leapfrog leapfrog;
 
@@ -113,30 +103,22 @@ int main() {
     //~ RepulsiveForce(float fKRep, float fKSticky, float fLInf, float fLSup);
     RepulsiveForce repulsiveForce(0.191f, 0.282f, 0.145, 0.159);
     
-    //~ StickyForce(float fK, float fLInf, float fLSup);
-    //~ StickyForce stickyForce(0.4, L - 0.02, L+0.02);
-
     //~ BrakeForce(float dt, float v, float l, const Leapfrog& solver);
     BrakeForce brakeForce(0.0f, 0.011, 0.159, leapfrog);
 	
-	//particleManager.printForces();
-    
-    // Polygon Polygon::buildBox(glm::vec3 color, glm::vec2 position, float width, float height, bool isInner)
-    //~ Polygon box = Polygon::buildBox(glm::vec3(0.5,0.3,0.3), glm::vec2(0.f,0.f), 1.8f, 1.8f, true);
-    //~ Polygon box2 = Polygon::buildBox(glm::vec3(0.5,0.3,0.3), glm::vec2(-0.2f,-0.5f), 0.5f, 0.3f, false);
-    Polygon box2 = Polygon::buildBox(glm::vec3(0.2,0.2,0.9), glm::vec2(0.2,-0.3), 1.0, 2.0, -30.0f);
+	
+	// ----- Boxes -----
+	Polygon box2 = Polygon::buildBox(glm::vec3(0.2,0.2,0.9), glm::vec2(0.2,-0.3), 1.0, 2.0, -30.0f);
     
     Polygon boxL = Polygon::buildBox(glm::vec3(1.0), glm::vec2(-1.0,0.0),0.1,2.0,false);
     Polygon boxR = Polygon::buildBox(glm::vec3(1.0), glm::vec2(1.0,0.0),0.1,2.0,false);
     Polygon boxT = Polygon::buildBox(glm::vec3(1.0), glm::vec2(0.0,1.0),2.0,0.1,false);
     Polygon boxB = Polygon::buildBox(glm::vec3(1.0), glm::vec2(0.0,-1.0),2.0,0.1,false);
     
-    //Polygon circle = Polygon::buildCircle(glm::vec3(0.2,0.7,0.2), glm::vec2(0.4f,0.1f), 0.2f, 32, false);
-    //Polygon circle2 = Polygon::buildCircle(glm::vec3(0.2,0.5,0.9), glm::vec2(-0.2f,0.35f), 0.15f, 32, false);
+    
+    // ----- Forces de répulsion des boxes -----
+    float polyStickyCoef = 1.005f;
 	
-	float polyStickyCoef = 1.005f;
-	
-	//~ PolygonForce boxPolyForce(box, polyStickyCoef, leapfrog);
 	PolygonForce box2PolyForce(box2, polyStickyCoef, leapfrog);
 	
 	PolygonForce boxLPolyForce(boxL, polyStickyCoef, leapfrog);
@@ -144,10 +126,9 @@ int main() {
 	PolygonForce boxTPolyForce(boxT, polyStickyCoef, leapfrog);
 	PolygonForce boxBPolyForce(boxB, polyStickyCoef, leapfrog);
 	
-	//PolygonForce circlePolyForce(circle, 2.f, leapfrog);
-	//PolygonForce circle2PolyForce(circle2, 2.0f, leapfrog);
-	
-    std::vector<std::pair<Polygon, PolygonForce>> polysAndForces;
+	// ----- Ajout des boxes et de leurs forces à un vecteur -----
+	// => rendu et application des forces dans la même passe
+	std::vector<std::pair<Polygon, PolygonForce>> polysAndForces;
     polysAndForces.push_back(std::pair<Polygon, PolygonForce>(box2, box2PolyForce));
     polysAndForces.push_back(std::pair<Polygon, PolygonForce>(boxL, boxLPolyForce));
     polysAndForces.push_back(std::pair<Polygon, PolygonForce>(boxR, boxRPolyForce));
@@ -157,20 +138,16 @@ int main() {
 	
     // Temps s'écoulant entre chaque frame
     float dt = 0.f;
-
 	float pas = 0.001;
-	
 	bool open = false;
-
 	bool done = false;
+	
 	
 	/*
 	 * 
 	 * IHM
 	 * 
 	 */
-	 
-	 
 	
 	GLenum error;
 	if(GLEW_OK != (error = glewInit())) {
@@ -221,15 +198,15 @@ int main() {
 	GLuint framebuffer;
 	glGenFramebuffers(1, &framebuffer);
 	
-	GLuint blurFramebuffer;
-	glGenFramebuffers(1, &blurFramebuffer);
+	//~ GLuint blurFramebuffer;
+	//~ glGenFramebuffers(1, &blurFramebuffer);
 	
 	// Texture
 	GLuint texColorBuffer;
 	glGenTextures(1, &texColorBuffer);
 	
-	GLuint texColorBlurBuffer;
-	glGenTextures(1, &texColorBlurBuffer);
+	//~ GLuint texColorBlurBuffer;
+	//~ glGenTextures(1, &texColorBlurBuffer);
 	
 	
 	// VAO du quad d'affichage
@@ -304,28 +281,28 @@ int main() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	
 	
-	glBindFramebuffer(GL_FRAMEBUFFER, blurFramebuffer);
-		glBindTexture(GL_TEXTURE_2D, texColorBlurBuffer);
-			glTexImage2D(
-				GL_TEXTURE_2D, 0, GL_RGB, WINDOW_WIDTH, WINDOW_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL
-			);
-			
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			
-			glFramebufferTexture2D(
-				GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBlurBuffer, 0
-			);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		
-		compStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		
-		if(compStatus == GL_FRAMEBUFFER_COMPLETE){
-			std::cout << "Framebuffer complet ! Code status : " << compStatus << std::endl;
-		}else{
-			std::cout << "Erreur : framebuffer incomplet - code status : " << compStatus << std::endl;
-		}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//~ glBindFramebuffer(GL_FRAMEBUFFER, blurFramebuffer);
+		//~ glBindTexture(GL_TEXTURE_2D, texColorBlurBuffer);
+			//~ glTexImage2D(
+				//~ GL_TEXTURE_2D, 0, GL_RGB, WINDOW_WIDTH, WINDOW_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL
+			//~ );
+			//~ 
+			//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			//~ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			//~ 
+			//~ glFramebufferTexture2D(
+				//~ GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBlurBuffer, 0
+			//~ );
+		//~ glBindTexture(GL_TEXTURE_2D, 0);
+		//~ 
+		//~ compStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		//~ 
+		//~ if(compStatus == GL_FRAMEBUFFER_COMPLETE){
+			//~ std::cout << "Framebuffer complet ! Code status : " << compStatus << std::endl;
+		//~ }else{
+			//~ std::cout << "Erreur : framebuffer incomplet - code status : " << compStatus << std::endl;
+		//~ }
+	//~ glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	
     while(!done) {
         wm.startMainLoop();
@@ -345,68 +322,22 @@ int main() {
 		
 		
 		// Affichage de la texture (passage dans le shader pour blur et seuillage)
-		//~ glBindFramebuffer(GL_FRAMEBUFFER, blurFramebuffer); // deuxième blur inutile
-			//~ glClear(GL_COLOR_BUFFER_BIT);
 			renderer.drawQuad(vao, texColorBuffer, quadTriangleCount, blurSize, 0);
-		//~ glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		
-		// --- TEST DEUXIEME FLOU ---
-		//~ renderer.drawQuad(vao, texColorBlurBuffer, quadTriangleCount, blurSize, 1);
-			
-		//~ box.draw(renderer, 2.f);
 		
-		//~ for(int i = 0; i < boxes.size(); ++i){
-			//~ boxes[i].draw(renderer);
-		//~ }
-		
-		//~ box2.draw(renderer, 2.f);
-		//~ 
-		//~ boxL.draw(renderer, 2.f);
-		//~ boxR.draw(renderer, 2.f);
-		//~ boxT.draw(renderer, 2.f);
-		//~ boxB.draw(renderer, 2.f);
-        //circle.draw(renderer, 2.f);
-        //circle2.draw(renderer, 2.f);
-
-        // Simulation
+		// Simulation
         constForce.apply(particleManager);
 
         repulsiveForce.apply(particleManager);
-        //~ stickyForce.apply(particleManager);
-        //~ hookForce.apply(particleManager);
-
+        
         brakeForce.setDt(dt);
         brakeForce.apply(particleManager);
 
-        //~ boxPolyForce.setDt(dt);
-        //~ boxPolyForce.apply(particleManager);
-        
-        for(int i = 0; i < polysAndForces.size(); ++i){
+		for(int i = 0; i < polysAndForces.size(); ++i){
 			polysAndForces[i].first.draw(renderer);
 			polysAndForces[i].second.setDt(dt);
 			polysAndForces[i].second.apply(particleManager);
 		}
-        
-        //~ box2PolyForce.setDt(dt);
-        //~ box2PolyForce.apply(particleManager);
-        //~ 
-        //~ boxLPolyForce.setDt(dt);
-        //~ boxLPolyForce.apply(particleManager);
-        //~ 
-        //~ boxRPolyForce.setDt(dt);
-        //~ boxRPolyForce.apply(particleManager);
-        //~ 
-        //~ boxTPolyForce.setDt(dt);
-        //~ boxTPolyForce.apply(particleManager);
-        //~ 
-        //~ boxBPolyForce.setDt(dt);
-        //~ boxBPolyForce.apply(particleManager);
-        
-        //circlePolyForce.setDt(dt);
-        //circlePolyForce.apply(particleManager);
-        
-        //circle2PolyForce.setDt(dt);
-        //circle2PolyForce.apply(particleManager);
         
         leapfrog.solve(particleManager, dt);
         
@@ -482,8 +413,6 @@ int main() {
 						repulsiveForce.m_fLInf += dSup;
 						repulsiveForce.m_fLSup += dInf;
 					}
-					
-					
 				}
 				
 				if(brakeIHM == false){
@@ -540,7 +469,6 @@ int main() {
 					switch(e.button.button){
 						case SDL_BUTTON_LEFT:
 							is_lClicPressed = true;
-							//~ std::cout << "pushed : " << is_lClicPressed << std::endl;
 							break;
 							
 						default:
@@ -552,7 +480,6 @@ int main() {
 					switch(e.button.button){
 						case SDL_BUTTON_LEFT:
 							is_lClicPressed = false;
-							//~ std::cout << "released : " << is_lClicPressed << std::endl;
 							break;
 						
 						default:
@@ -569,7 +496,6 @@ int main() {
 							break;
 							
 						case SDLK_SPACE:
-							//~ particleManager.addRandomParticles(100);
 							open = !open;
 							break;
 							
@@ -591,7 +517,6 @@ int main() {
 									config << brakeForce.m_fV << "\n";
 									config << brakeForce.m_fL << "\n";
 									config << brakeForce.m_fAmort << "\n";
-									//config.flush();
 									std::cout << "Config written \n";
 								} else {
 									std::cout << "Unable to open config \n";
@@ -637,35 +562,6 @@ int main() {
 							else std::cout << "Unable to open config \n";
 							break;
 							
-						//~ case SDLK_r:
-							//~ repulsiveForce.m_fK += pas;
-							//~ std::cout << "rep K : " << repulsiveForce.m_fK << " - rep L : " << repulsiveForce.m_fL << std::endl;
-							//~ break;
-							//~ 
-						//~ case SDLK_t:
-							//~ repulsiveForce.m_fL += pas;
-							//~ stickyForce.m_fLSup += pas;
-							//~ stickyForce.m_fLInf += pas;
-							//~ std::cout << "rep K : " << repulsiveForce.m_fK << " - rep L : " << repulsiveForce.m_fL << std::endl;
-							//~ break;
-							//~ 
-						//~ case SDLK_b:
-							//~ brakeForce.m_fV += pas;
-							//~ std::cout << "brake K : " << brakeForce.m_fV << " - brake L : " << brakeForce.m_fL << std::endl;
-							//~ break;
-							//~ 
-						//~ case SDLK_n:
-							//~ brakeForce.m_fL += pas;
-							//~ std::cout << "brake K : " << brakeForce.m_fV << " - brake L : " << brakeForce.m_fL << std::endl;
-							//~ break;
-							
-						//~ case SDLK_p:
-							//~ pas *= 2.0;
-							//~ break;
-							//~ 
-						//~ case SDLK_i:
-							//~ pas *= -1.0;
-							//~ break;
 					}
 					break;
 					
@@ -681,9 +577,9 @@ int main() {
 	
 	// Framebuffer
 	glDeleteFramebuffers(1, &framebuffer);
-	glDeleteFramebuffers(1, &blurFramebuffer);
+	//~ glDeleteFramebuffers(1, &blurFramebuffer);
 	glDeleteTextures(1, &texColorBuffer);
-	glDeleteTextures(1, &texColorBlurBuffer);
+	//~ glDeleteTextures(1, &texColorBlurBuffer);
 	
 	
 	// imgui
@@ -692,6 +588,12 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
+
+// -------------------
+// 
+// ----- SHADERS -----
+//
+// -------------------
 
 int  compile_and_link_shader(ShaderGLSL & shader, int typeMask, const char * sourceBuffer, int bufferSize)
 {
@@ -807,13 +709,6 @@ int  compile_and_link_shader(ShaderGLSL & shader, int typeMask, const char * sou
         glAttachShader(shader.program, fragmentShaderObject);
     }
 
-
-    // Bind attribute location
-    //~ glBindAttribLocation(shader.program,  0,  "VertexPosition");
-    //~ glBindAttribLocation(shader.program,  1,  "VertexNormal");
-    //~ glBindAttribLocation(shader.program,  2,  "VertexTexCoord");
-    //~ glBindFragDataLocation(shader.program, 0, "Color");
-    //~ glBindFragDataLocation(shader.program, 1, "Normal");
 
     // Link attached shaders
     glLinkProgram(shader.program);
