@@ -109,7 +109,8 @@ int main() {
 	
 	// ----- Boxes -----
 	//~ static Polygon 		buildBox(glm::vec3 color, 		 glm::vec2 position,  float width, float height, float rotationInDegrees);
-	Polygon box2 = Polygon::buildBox(glm::vec3(0.2,0.2,0.9), glm::vec2(0.,0.), 1.0, 		   2.0, 		 30.0f);
+	Polygon box1 = Polygon::buildBox(glm::vec3(0.9,0.8,0.3), glm::vec2(-0.38,-0.2), 0.25, 		   0.12, 		 -78.0f);
+	Polygon box2 = Polygon::buildBox(glm::vec3(0.2,0.2,0.9), glm::vec2(0.1,0.5), 0.05, 		   0.47, 		 30.0f);
     
     Polygon boxL = Polygon::buildBox(glm::vec3(1.0), glm::vec2(-1.0,0.0),0.1,2.0,false);
     Polygon boxR = Polygon::buildBox(glm::vec3(1.0), glm::vec2(1.0,0.0),0.1,2.0,false);
@@ -120,6 +121,7 @@ int main() {
     // ----- Forces de répulsion des boxes -----
     float polyStickyCoef = 1.005f;
 	
+	PolygonForce box1PolyForce(box1, polyStickyCoef, leapfrog);
 	PolygonForce box2PolyForce(box2, polyStickyCoef, leapfrog);
 	
 	PolygonForce boxLPolyForce(boxL, polyStickyCoef, leapfrog);
@@ -130,6 +132,7 @@ int main() {
 	// ----- Ajout des boxes et de leurs forces à un vecteur -----
 	// => rendu et application des forces dans la même passe
 	std::vector<std::pair<Polygon, PolygonForce>> polysAndForces;
+    polysAndForces.push_back(std::pair<Polygon, PolygonForce>(box1, box1PolyForce));
     polysAndForces.push_back(std::pair<Polygon, PolygonForce>(box2, box2PolyForce));
     polysAndForces.push_back(std::pair<Polygon, PolygonForce>(boxL, boxLPolyForce));
     polysAndForces.push_back(std::pair<Polygon, PolygonForce>(boxR, boxRPolyForce));
@@ -485,6 +488,7 @@ int main() {
 								
 								if(tempClick.x > minX && tempClick.x < maxX && tempClick.y > minY && tempClick.y < maxY){
 									std::cout << "In !" << std::endl;
+									polysAndForces.erase(polysAndForces.begin()+i);
 								}else{
 									std::cout << "Out !" << std::endl;
 								}

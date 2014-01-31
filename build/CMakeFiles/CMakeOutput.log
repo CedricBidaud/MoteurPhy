@@ -3625,3 +3625,139 @@ make[2]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/M
 make[1]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
 
 
+Determining if the function XOpenDisplay exists in the /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so passed with the following output:
+Change Dir: /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2115677270/fast"
+make[1]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2115677270.dir/build.make CMakeFiles/cmTryCompileExec2115677270.dir/build
+make[2]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/cmake -E cmake_progress_report /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2115677270.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=XOpenDisplay   -o CMakeFiles/cmTryCompileExec2115677270.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2115677270
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2115677270.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=XOpenDisplay    CMakeFiles/cmTryCompileExec2115677270.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2115677270 -rdynamic -lX11 -lXext 
+make[2]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+make[1]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+
+
+Determining if the function gethostbyname exists passed with the following output:
+Change Dir: /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3573989540/fast"
+make[1]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3573989540.dir/build.make CMakeFiles/cmTryCompileExec3573989540.dir/build
+make[2]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/cmake -E cmake_progress_report /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3573989540.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=gethostbyname   -o CMakeFiles/cmTryCompileExec3573989540.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3573989540
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3573989540.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=gethostbyname    CMakeFiles/cmTryCompileExec3573989540.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3573989540 -rdynamic 
+make[2]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+make[1]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+
+
+Determining if the function connect exists passed with the following output:
+Change Dir: /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1900603170/fast"
+make[1]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1900603170.dir/build.make CMakeFiles/cmTryCompileExec1900603170.dir/build
+make[2]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/cmake -E cmake_progress_report /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1900603170.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=connect   -o CMakeFiles/cmTryCompileExec1900603170.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1900603170
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1900603170.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=connect    CMakeFiles/cmTryCompileExec1900603170.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1900603170 -rdynamic 
+make[2]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+make[1]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+
+
+Determining if the function remove exists passed with the following output:
+Change Dir: /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec608675731/fast"
+make[1]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/make -f CMakeFiles/cmTryCompileExec608675731.dir/build.make CMakeFiles/cmTryCompileExec608675731.dir/build
+make[2]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/cmake -E cmake_progress_report /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec608675731.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=remove   -o CMakeFiles/cmTryCompileExec608675731.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec608675731
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec608675731.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=remove    CMakeFiles/cmTryCompileExec608675731.dir/CheckFunctionExists.c.o  -o cmTryCompileExec608675731 -rdynamic 
+make[2]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+make[1]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+
+
+Determining if the function shmat exists passed with the following output:
+Change Dir: /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3437154900/fast"
+make[1]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3437154900.dir/build.make CMakeFiles/cmTryCompileExec3437154900.dir/build
+make[2]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/cmake -E cmake_progress_report /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3437154900.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=shmat   -o CMakeFiles/cmTryCompileExec3437154900.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3437154900
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3437154900.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=shmat    CMakeFiles/cmTryCompileExec3437154900.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3437154900 -rdynamic 
+make[2]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+make[1]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+
+
+Determining if the function IceConnectionNumber exists in the ICE passed with the following output:
+Change Dir: /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec770672887/fast"
+make[1]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/make -f CMakeFiles/cmTryCompileExec770672887.dir/build.make CMakeFiles/cmTryCompileExec770672887.dir/build
+make[2]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/cmake -E cmake_progress_report /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec770672887.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=IceConnectionNumber   -o CMakeFiles/cmTryCompileExec770672887.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec770672887
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec770672887.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=IceConnectionNumber    CMakeFiles/cmTryCompileExec770672887.dir/CheckFunctionExists.c.o  -o cmTryCompileExec770672887 -rdynamic -lICE 
+make[2]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+make[1]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+
+
+Determining if files pthread.h exist passed with the following output:
+Change Dir: /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2224998257/fast"
+make[1]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2224998257.dir/build.make CMakeFiles/cmTryCompileExec2224998257.dir/build
+make[2]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/cmake -E cmake_progress_report /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2224998257.dir/CheckIncludeFiles.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec2224998257.dir/CheckIncludeFiles.c.o   -c /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
+Linking C executable cmTryCompileExec2224998257
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2224998257.dir/link.txt --verbose=1
+/usr/bin/cc         CMakeFiles/cmTryCompileExec2224998257.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec2224998257 -rdynamic 
+make[2]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+make[1]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1824857987/fast"
+make[1]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1824857987.dir/build.make CMakeFiles/cmTryCompileExec1824857987.dir/build
+make[2]: entrant dans le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+/usr/bin/cmake -E cmake_progress_report /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1824857987.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTryCompileExec1824857987.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1824857987
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1824857987.dir/link.txt --verbose=1
+/usr/bin/cc     -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTryCompileExec1824857987.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1824857987 -rdynamic -lpthread 
+make[2]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+make[1]: quittant le répertoire « /home/cedric/Bureau/Moteur_physique/PROJET/MoteurPhy/build/CMakeFiles/CMakeTmp »
+
+
